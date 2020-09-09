@@ -1,23 +1,25 @@
 import React from "react"
 import { FlexDiv } from "../styles/div"
-import { Button } from "@material-ui/core"
+import { Button, Typography, Input } from "@material-ui/core"
 
 const LoginForm = () => {
   return (
     <FlexDiv
       style={{ padding: "20px" }}
       direction='column'
+      height='100%'
       align='flex-start'
       justify='space-between'>
-      <h3>아이디</h3>
-      <input></input>
-      <h3>비밀번호</h3>
-      <input></input>
-      <Button
-        style={{ marginTop: "20px", alignSelf: "center" }}
-        variant='contained'>
-        로그인
-      </Button>
+      <Typography variant='h5'>아이디</Typography>
+      <Input></Input>
+      <Typography variant='h5' component='span'>
+        비밀번호
+      </Typography>
+      <Input></Input>
+      <div style={{ marginTop: "20px", alignSelf: "center" }}>
+        <Button variant='contained'>로그인</Button>
+        <Button variant='contained'>회원가입</Button>
+      </div>
     </FlexDiv>
   )
 }
