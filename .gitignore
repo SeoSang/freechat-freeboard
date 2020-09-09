@@ -1,0 +1,15 @@
+# next 관련
+/front/.next/
+/out/
+
+# 정보
+/back/.env
+
+package-lock.json
+
+/back/node_modules/
+/front/node_modules/
+node_modules
+
+# production
+/build
