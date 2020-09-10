@@ -14,10 +14,11 @@ import {
 } from "sequelize"
 import { Project } from "./project"
 
-interface UserAttributes {
+export interface UserAttributes {
   id: number
   email: string
   password: string
+  name: string
   nickname: string | null
 }
 
@@ -29,8 +30,9 @@ class User
   implements UserAttributes {
   public id!: number
   public email!: string
-  public password!: string
+  public name!: string
   public nickname!: string | null
+  public password!: string
 
   // timestamps!
   public readonly createdAt!: Date
@@ -68,6 +70,10 @@ export const userInit = (sequelize: Sequelize) => {
       nickname: {
         type: new DataTypes.STRING(128),
         allowNull: true,
+      },
+      name: {
+        type: new DataTypes.STRING(64),
+        allowNull: false,
       },
     },
     {

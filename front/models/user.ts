@@ -1,12 +1,12 @@
 import { observable } from "mobx"
 
-export class TodoModel {
+export class UserModel {
   readonly id: number
   @observable public text: string
   @observable public completed: boolean
 
   constructor(text: string, completed: boolean = false) {
-    this.id = TodoModel.generateId()
+    this.id = UserModel.generateId()
     this.text = text
     this.completed = completed
   }
@@ -17,4 +17,4 @@ export class TodoModel {
   }
 }
 
-export default TodoModel
+export default UserModel

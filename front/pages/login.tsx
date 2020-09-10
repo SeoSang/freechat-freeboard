@@ -1,4 +1,6 @@
+import axios from "axios"
 import React, { useState } from "react"
+import { useRouter } from "next/dist/client/router"
 import Avatar from "@material-ui/core/Avatar"
 import Button from "@material-ui/core/Button"
 import CssBaseline from "@material-ui/core/CssBaseline"
@@ -13,8 +15,10 @@ import Typography from "@material-ui/core/Typography"
 import { makeStyles } from "@material-ui/core/styles"
 import Container from "@material-ui/core/Container"
 import Copyright from "../components/Copyright"
-import { PageLink } from "../layout/MainLayout"
 import { useForm } from "react-hook-form"
+import { PageLink } from "../components/PageLink"
+import { BACKEND_URL } from "../util/util"
+import { MainUserData } from "../types/user"
 
 interface LoginFormValues {
   email: string
@@ -53,11 +57,12 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Login() {
   const classes = useStyles()
+  const router = useRouter()
 
   const { register, handleSubmit, watch, errors } = useForm<LoginFormValues>()
   const [validateText, setValidateText] = useState<string>()
 
-  const onSubmit = (data: LoginFormValues) => {
+  const onSubmit = async (data: LoginFormValues) => {
     for (const [key, value] of Object.entries(data)) {
       console.log(value)
       if (value == "") {
@@ -65,6 +70,15 @@ export default function Login() {
         return
       }
     }
+    const response = await axios.post(`${BACKEND_URL}/api/user/login`, data, {
+      withCredentials: true,
+    })
+    const me: MainUserData = response.data
+    if (me) {
+      alert(`${me.nickname} 님 로그인되었습니다!`)
+      router.push("/")
+    }
+    return
   }
 
   return (

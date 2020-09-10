@@ -1,4 +1,3 @@
-import { HttpException } from "./src/exceptions"
 import db from "./db"
 import dotenv from "dotenv"
 import cors from "cors"
@@ -16,7 +15,7 @@ db.sequelize?.sync()
 const app = express()
 app.use(morgan("dev")) // 로그 찍어줌
 
-app.set("port", process.env.PORT || 8001)
+app.set("port", process.env.PORT || 6245)
 app.set("view engine", "html")
 nunjucks.configure("views", {
   express: app,
@@ -26,6 +25,7 @@ nunjucks.configure("views", {
 app.use(
   cors({
     origin: process.env.CORS_ORIGIN,
+    credentials: true,
   })
 )
 app.use(express.urlencoded({ extended: true })) // true면 qs 모듈
@@ -37,9 +37,14 @@ app.use(
     resave: false,
     saveUninitialized: false,
     secret: ss,
-    cookie: { secure: false },
+    cookie: {
+      secure: "auto",
+      httpOnly: true,
+    },
   })
 )
+
+app.use("/api/user", userRouter)
 
 app.use((req, res, next) => {
   res.status(404).send("404 not Found!")
@@ -47,8 +52,8 @@ app.use((req, res, next) => {
 
 app.use(errorHandler)
 
-app.listen("port", () => {
-  console.log(`실행됨 : http://localhost:${port}`)
+app.listen(app.get("port"), () => {
+  console.log(`실행됨 : http://localhost:${app.get("port")}`)
 })
 
 export default app

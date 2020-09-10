@@ -1,3 +1,4 @@
+import axios from "axios"
 import React, { useState } from "react"
 import Avatar from "@material-ui/core/Avatar"
 import Button from "@material-ui/core/Button"
@@ -12,9 +13,10 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined"
 import Typography from "@material-ui/core/Typography"
 import { makeStyles } from "@material-ui/core/styles"
 import Container from "@material-ui/core/Container"
-import { PageLink } from "../layout/MainLayout"
 import { useForm } from "react-hook-form"
 import Copyright from "../components/Copyright"
+import { PageLink } from "../components/PageLink"
+import { BACKEND_URL } from "../util/util"
 
 type FormValues = {
   name: string
@@ -64,7 +66,7 @@ export default function register() {
   const { register, handleSubmit, watch, errors } = useForm<FormValues>()
   const [validateText, setValidateText] = useState<string>()
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit = async (data: FormValues) => {
     for (const [key, value] of Object.entries(data)) {
       console.log(value)
       if (value == "") {
@@ -72,6 +74,13 @@ export default function register() {
         return
       }
     }
+    try {
+      const newUser = await axios.post(`${BACKEND_URL}/api/user/register`, data)
+      console.log(newUser)
+    } catch (e) {
+      console.error(e)
+    }
+    return
   }
 
   return (

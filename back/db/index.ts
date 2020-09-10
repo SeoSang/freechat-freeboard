@@ -13,7 +13,7 @@ const sequelize = new Sequelize(
 const User = userInit(sequelize)
 
 const db = {
-  User,
+  users: User,
   sequelize,
 }
 

@@ -3,8 +3,8 @@ import express from "express"
 const { Router } = require("express")
 const router = express.Router()
 
-router.route("/login").get(login)
+router.route("/login").post(login)
 
-router.route("/register").get(register)
+router.route("/register").post(register)
 
 export default router
