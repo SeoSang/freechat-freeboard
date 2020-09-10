@@ -40,13 +40,13 @@ const MainLayout: FC<{ children: ReactComponentElement<any, any> }> = ({
           <PageLink href='/login'>
             <div className={st.menu_content}>로그인</div>
           </PageLink>
-          <div className={st.menu_content}>회원가입</div>
+          <PageLink href='/register'>
+            <div className={st.menu_content}>회원가입</div>
+          </PageLink>
           <div className={st.menu_content}>로고</div>
         </div>
       </div>
-      <div style={{ padding: "10%" }} className={st.content}>
-        {children}
-      </div>
+      <div className={st.content}>{children}</div>
     </div>
   )
 }
