@@ -14,25 +14,13 @@ import { makeStyles } from "@material-ui/core/styles"
 import Container from "@material-ui/core/Container"
 import { PageLink } from "../layout/MainLayout"
 import { useForm } from "react-hook-form"
+import Copyright from "../components/Copyright"
 
 type FormValues = {
   name: string
   nickname: string
   email: string
   password: string
-}
-
-function Copyright() {
-  return (
-    <Typography variant='body2' color='textSecondary' align='center'>
-      {"Copyright © "}
-      <Link color='inherit' href='https://material-ui.com/'>
-        SeoSang
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  )
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -81,6 +69,7 @@ export default function register() {
       console.log(value)
       if (value == "") {
         setValidateText(`${key}를 입력해주세요!`)
+        return
       }
     }
   }
