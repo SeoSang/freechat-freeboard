@@ -2,17 +2,11 @@ import db from "./db"
 import dotenv from "dotenv"
 import cors from "cors"
 import cookieParser from "cookie-parser"
-import express, {
-  Request,
-  Response,
-  NextFunction,
-  ErrorRequestHandler,
-} from "express"
+import express, { Request, Response, NextFunction } from "express"
 import morgan from "morgan"
 import nunjucks from "nunjucks"
 import userRouter from "./routes/user"
 import session from "express-session"
-import errorHandler from "./middlewares/error"
 
 dotenv.config()
 
@@ -20,7 +14,7 @@ db.sequelize?.sync()
 const app = express()
 app.use(morgan("dev")) // 로그 찍어줌
 
-app.set("port", process.env.PORT || 6245)
+app.set("port", process.env.PORT || 6246)
 app.set("view engine", "html")
 nunjucks.configure("views", {
   express: app,
