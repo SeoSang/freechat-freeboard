@@ -29,7 +29,6 @@ app.use(
 )
 app.use(express.urlencoded({ extended: true })) // true면 qs 모듈
 app.use(express.json()) // 알아서 json 파일 파싱해줌
-app.use(cookieParser())
 app.use(cookieParser("password"))
 const ss: string = process.env.SESSION_SECRET ? process.env.SESSION_SECRET : ""
 app.use(

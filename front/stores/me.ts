@@ -1,6 +1,8 @@
 import { UserAttributes } from "./../../back-api/db/models/user"
 import { observable, action, computed, reaction } from "mobx"
 import { createContext } from "react"
+import { useStore } from "."
+import { useObserver } from "mobx-react"
 
 export const initialMeState = {
   id: -1,
@@ -35,5 +37,12 @@ class MeStore {
     return {}
   }
 }
+
+// export const useMeStore = () => {
+//   const { meStore } = useStore()
+//   return useObserver(() => {
+//     meStore
+//   })
+// }
 
 export default MeStore

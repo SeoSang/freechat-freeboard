@@ -10,6 +10,7 @@ import { BACKEND_URL } from "../util/util"
 
 const MenuLayout = observer(() => {
   const { meStore } = useStore()
+  console.log(meStore)
   const onClickLogout = async () => {
     try {
       await axios.post(`${BACKEND_URL}/api/user/logout`, null, {
