@@ -2,17 +2,11 @@ import db from "./db"
 import dotenv from "dotenv"
 import cors from "cors"
 import cookieParser from "cookie-parser"
-import express, {
-  Request,
-  Response,
-  NextFunction,
-  ErrorRequestHandler,
-} from "express"
+import express, { Request, Response, NextFunction } from "express"
 import morgan from "morgan"
 import nunjucks from "nunjucks"
 import userRouter from "./routes/user"
 import session from "express-session"
-import errorHandler from "./middlewares/error"
 
 dotenv.config()
 
@@ -35,6 +29,7 @@ app.use(
 )
 app.use(express.urlencoded({ extended: true })) // true면 qs 모듈
 app.use(express.json()) // 알아서 json 파일 파싱해줌
+app.use(cookieParser())
 app.use(cookieParser("password"))
 const ss: string = process.env.SESSION_SECRET ? process.env.SESSION_SECRET : ""
 app.use(

@@ -4,6 +4,7 @@
 
 # 정보
 /back/.env
+.env
 
 package-lock.json
 

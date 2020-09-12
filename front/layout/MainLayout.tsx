@@ -3,6 +3,7 @@ import st from "./MainLayout.module.css"
 import MenuLayout from "./MenuLayout"
 import Copyright from "../components/Copyright"
 import styled from "styled-components"
+import { RootStore } from "../stores"
 
 const Footer = styled.footer`
   width: 100%;
@@ -13,9 +14,9 @@ const Footer = styled.footer`
   align-items: center;
 `
 
-const MainLayout: FC<{ children: ReactComponentElement<any, any> }> = ({
-  children,
-}) => {
+const MainLayout: FC<{
+  children: ReactComponentElement<any, any>
+}> = ({ children }) => {
   return (
     <div className={st.main_viewport}>
       <MenuLayout />
@@ -27,4 +28,4 @@ const MainLayout: FC<{ children: ReactComponentElement<any, any> }> = ({
   )
 }
 
-export default React.memo(MainLayout)
+export default MainLayout

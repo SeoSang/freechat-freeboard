@@ -51,8 +51,10 @@ export const login = asyncHandler(
 
 export const logout = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    req.session?.destroy(() => {})
-    res.redirect("/")
+    return res
+      .status(200)
+      .clearCookie("token", CookieOptions)
+      .send("logout complete")
   }
 )
 

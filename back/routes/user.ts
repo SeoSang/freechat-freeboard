@@ -1,9 +1,10 @@
-import { login, register } from "./../controllers/user"
+import { login, register, logout } from "./../controllers/user"
 import express from "express"
-const { Router } = require("express")
 const router = express.Router()
 
 router.route("/login").post(login)
+
+router.route("/logout").post(logout)
 
 router.route("/register").post(register)
 

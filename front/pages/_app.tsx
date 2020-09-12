@@ -1,11 +1,18 @@
 import "../styles/globals.css"
-import React, { useEffect } from "react"
+import React, { useMemo, useEffect } from "react"
+// next
 import { AppPropsType } from "next/dist/next-server/lib/utils"
 import Head from "next/head"
-import MainLayout from "../layout/MainLayout"
+// mobx
+import { Provider } from "mobx-react"
+import RootStore from "../stores"
+// material-ui
 import { ThemeProvider } from "@material-ui/styles"
 import CssBaseline from "@material-ui/core/CssBaseline"
 import theme from "../styles/theme"
+// custom
+import MainLayout from "../layout/MainLayout"
+import initializeStore from "../stores"
 
 function MyApp({ Component, pageProps }: AppPropsType) {
   // useEffect(() => {
@@ -14,6 +21,17 @@ function MyApp({ Component, pageProps }: AppPropsType) {
   //     jssStyles!.parentNode!.removeChild(jssStyles)
   //   }
   // })
+  const store = useMemo(() => {
+    const rootStore = initializeStore()
+    return rootStore
+  }, [])
+
+  useEffect(() => {
+    const { initialState } = pageProps
+    if (initialState) {
+      store.hydrate(initialState)
+    }
+  }, [store, pageProps])
 
   return (
     <>
@@ -26,10 +44,12 @@ function MyApp({ Component, pageProps }: AppPropsType) {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <ThemeProvider theme={theme}>
-        {/* <CssBaseline /> */}
-        <MainLayout>
-          <Component {...pageProps} />
-        </MainLayout>
+        <Provider store={store}>
+          {/* <CssBaseline /> */}
+          <MainLayout>
+            <Component {...pageProps} />
+          </MainLayout>
+        </Provider>
       </ThemeProvider>
     </>
   )
