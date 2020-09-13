@@ -5,7 +5,6 @@ import { AppPropsType } from "next/dist/next-server/lib/utils"
 import Head from "next/head"
 // mobx
 import { Provider } from "mobx-react"
-import RootStore from "../stores"
 // material-ui
 import { ThemeProvider } from "@material-ui/styles"
 import CssBaseline from "@material-ui/core/CssBaseline"
@@ -25,13 +24,6 @@ function MyApp({ Component, pageProps }: AppPropsType) {
     const rootStore = initializeStore()
     return rootStore
   }, [])
-
-  useEffect(() => {
-    const { initialState } = pageProps
-    if (initialState) {
-      store.hydrate(initialState)
-    }
-  }, [store, pageProps])
 
   return (
     <>

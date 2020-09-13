@@ -1,7 +1,7 @@
 import { UserAttributes } from "./../../back-api/db/models/user"
 import { observable, action, computed, reaction } from "mobx"
 import { createContext } from "react"
-import { useStore } from "."
+import { RootStore, useStore } from "."
 import { useObserver } from "mobx-react"
 
 export const initialMeState = {
@@ -16,6 +16,11 @@ class MeStore {
   @observable name = initialMeState.name
   @observable nickname = initialMeState.nickname
   @observable email = initialMeState.email
+  public root
+
+  constructor(root: RootStore) {
+    this.root = root
+  }
 
   // hydrate(serializedStore) {}
 

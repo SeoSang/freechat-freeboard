@@ -8,7 +8,6 @@ import { BACKEND_URL } from "../util/util"
 import { MainUserData } from "../types/user"
 // mobx
 import { inject, observer } from "mobx-react"
-import MeStore from "../stores/me"
 // material-ui
 import Avatar from "@material-ui/core/Avatar"
 import Button from "@material-ui/core/Button"
@@ -61,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const Login: NextPage<> = () => {
+const Login = () => {
   const classes = useStyles()
   const router = useRouter()
   const { register, handleSubmit, errors } = useForm<LoginFormValues>()
@@ -165,4 +164,4 @@ const Login: NextPage<> = () => {
   )
 }
 
-export default inject("store")(observer(Login))
+export default observer(Login)
