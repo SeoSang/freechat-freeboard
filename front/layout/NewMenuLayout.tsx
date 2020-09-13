@@ -1,16 +1,5 @@
+import React from "react"
 import clsx from "clsx"
-import React, {
-  FC,
-  ReactComponentElement,
-  ReactElement,
-  useCallback,
-} from "react"
-import st from "./MainLayout.module.css"
-import MenuLayout from "./MenuLayout"
-import Copyright from "../components/Copyright"
-import styled from "styled-components"
-import { RootStore, useStore } from "../stores"
-import NewMenuLayout from "./NewMenuLayout"
 import {
   makeStyles,
   useTheme,
@@ -31,28 +20,15 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight"
 import ListItem from "@material-ui/core/ListItem"
 import ListItemIcon from "@material-ui/core/ListItemIcon"
 import ListItemText from "@material-ui/core/ListItemText"
-import AssignmentIcon from "@material-ui/icons/Assignment"
-import ChatIcon from "@material-ui/icons/Chat"
-import MapIcon from "@material-ui/icons/Map"
-import MiniProfile from "./MiniProfile"
-import DeleteIcon from "@material-ui/icons/Delete"
-import { PageLink } from "../components/PageLink"
+import InboxIcon from "@material-ui/icons/MoveToInbox"
+import MailIcon from "@material-ui/icons/Mail"
 
-const Footer = styled.footer`
-  width: 100%;
-  height: 100px;
-  border-top: 1px solid #eaeaea;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
-const drawerWidth = 240
+export const drawerWidth = 240
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: "flex",
-      // flexDirection: "column",
     },
     appBar: {
       transition: theme.transitions.create(["margin", "width"], {
@@ -105,23 +81,13 @@ const useStyles = makeStyles((theme: Theme) =>
       }),
       marginLeft: 0,
     },
-    menuRightContent: {
-      padding: theme.spacing(0, 1),
-    },
-    menuRightDiv: {
-      display: "flex",
-      marginLeft: "auto",
-    },
   })
 )
 
-const MainLayout: FC<{
-  children: ReactComponentElement<any, any>
-}> = ({ children }) => {
+export default function PersistentDrawerLeft() {
   const classes = useStyles()
   const theme = useTheme()
   const [open, setOpen] = React.useState(false)
-  const { meStore } = useStore()
 
   const handleDrawerOpen = () => {
     setOpen(true)
@@ -131,12 +97,8 @@ const MainLayout: FC<{
     setOpen(false)
   }
 
-  const isLoggedIn = useCallback(() => {
-    return meStore && meStore.id !== -1
-  }, [meStore])
-
   return (
-    <div className={classes.root}>
+    <>
       <CssBaseline />
       <AppBar
         position='fixed'
@@ -153,33 +115,8 @@ const MainLayout: FC<{
             <MenuIcon />
           </IconButton>
           <Typography variant='h6' noWrap>
-            메뉴
+            Persistent drawer
           </Typography>
-          <div className={classes.menuRightDiv}>
-            <PageLink href='/login'>
-              <Typography
-                className={clsx(
-                  classes.menuRightContent,
-                  isLoggedIn() && classes.hide
-                )}
-                variant='h6'
-                noWrap>
-                로그인
-              </Typography>
-            </PageLink>
-            <PageLink href='/register'>
-              <Typography
-                className={clsx(
-                  classes.menuRightContent,
-                  isLoggedIn() && classes.hide
-                )}
-                variant='h6'
-                noWrap>
-                회원가입
-              </Typography>
-            </PageLink>
-            {isLoggedIn() ? <MiniProfile></MiniProfile> : ""}
-          </div>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -201,51 +138,27 @@ const MainLayout: FC<{
         </div>
         <Divider />
         <List>
-          <PageLink href='userboard'>
-            <ListItem button>
+          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
+            <ListItem button key={text}>
               <ListItemIcon>
-                <AssignmentIcon />
+                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
               </ListItemIcon>
-              <ListItemText primary={"게시판"} />
+              <ListItemText primary={text} />
             </ListItem>
-          </PageLink>
-          <PageLink href='chat'>
-            <ListItem button>
-              <ListItemIcon>
-                <ChatIcon />
-              </ListItemIcon>
-              <ListItemText primary={"채팅하기"} />
-            </ListItem>
-          </PageLink>
+          ))}
         </List>
         <Divider />
         <List>
-          <ListItem button>
-            <ListItemIcon>
-              <MapIcon />
-            </ListItemIcon>
-            <ListItemText primary={"지도 보기"} />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <DeleteIcon />
-            </ListItemIcon>
-            <ListItemText primary={"쓰레기통!"} />
-          </ListItem>
+          {["All mail", "Trash", "Spam"].map((text, index) => (
+            <ListItem button key={text}>
+              <ListItemIcon>
+                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItem>
+          ))}
         </List>
       </Drawer>
-      <main
-        className={clsx(classes.content, {
-          [classes.contentShift]: open,
-        })}>
-        <div className={classes.drawerHeader} />
-        {children}
-        <Footer>
-          <Copyright />
-        </Footer>
-      </main>
-    </div>
+    </>
   )
 }
-
-export default MainLayout
