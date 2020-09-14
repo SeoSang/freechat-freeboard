@@ -8,7 +8,12 @@ import { likePostInit } from "./models/likePost"
 const env = process.env.NODE_ENV || "development"
 const config = require("../config/config.js")[env]
 
-const sequelize = new Sequelize(config.database, config.username, config.password, config)
+const sequelize = new Sequelize(
+  config.database,
+  config.username,
+  config.password,
+  config
+)
 
 const User = userInit(sequelize)
 const Domain = domainInit(sequelize)
@@ -21,6 +26,7 @@ User.hasMany(Domain)
 User.hasMany(Post)
 User.hasMany(Comment)
 Post.hasMany(Comment)
+Post.belongsTo(User)
 Post.belongsToMany(User, { through: "likePost" })
 Comment.belongsTo(Post)
 Comment.belongsToMany(User, { through: "likeComment" })

@@ -1,21 +1,31 @@
 import createError from "http-errors"
-import { RequestHandler } from "express"
+import { NextFunction, Request, RequestHandler, Response } from "express"
 import jwt from "jsonwebtoken"
+import asyncHandler from "./async"
 
-const authenticateToken: RequestHandler = (req: any, res, next) => {
-  // Gather the jwt access token from the request header
-  const authHeader = req.headers["authorization"]
-  const token = authHeader && authHeader.split(" ")[1]
-  if (!token) {
-    return next(createError(401, "Not authorized to access this route"))
+const isLoggedIn: RequestHandler = asyncHandler(
+  (req: Request, res: Response, next: NextFunction) => {
+    // Gather the jwt access token from the request header
+    const token = req.cookies.token
+    console.log("token =>", token)
+    if (!token) {
+      return next(createError(401, "Not authorized to access this route"))
+    }
+
+    jwt.verify(
+      token,
+      process.env.TOKEN_SECRET as string,
+      (err: any, user: any) => {
+        console.log("error => ", err)
+        console.log("user => ", user)
+        if (err) {
+          return res.sendStatus(403)
+        }
+        ;(req as any).user = user
+        next() // pass the execution off to whatever request the client intended
+      }
+    )
   }
+)
 
-  jwt.verify(token, process.env.TOKEN_SECRET as string, (err: any, user: any) => {
-    console.log(err)
-    if (err) return res.sendStatus(403)
-    req.user = user
-    next() // pass the execution off to whatever request the client intended
-  })
-}
-
-export default authenticateToken
+export default isLoggedIn

@@ -1,4 +1,3 @@
-import "../styles/globals.css"
 import React, { useMemo, useEffect } from "react"
 // next
 import { AppPropsType } from "next/dist/next-server/lib/utils"
@@ -12,14 +11,19 @@ import theme from "../styles/theme"
 // custom
 import MainLayout from "../layout/MainLayout"
 import initializeStore from "../stores"
+import { useCookies, CookiesProvider } from "react-cookie"
+import axios from "axios"
+// css
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
+import "../styles/globals.css"
 
 function MyApp({ Component, pageProps }: AppPropsType) {
+  // const [cookies, setCookie] = useCookies(["token"])
   // useEffect(() => {
-  //   const jssStyles = document.querySelector("#jss-server-side")
-  //   if (jssStyles) {
-  //     jssStyles!.parentNode!.removeChild(jssStyles)
-  //   }
+  //   const tokenValue = cookies.get("token")
+  //   axios.defaults.headers.common["authorization"] = tokenValue
   // })
+
   const store = useMemo(() => {
     const rootStore = initializeStore()
     return rootStore
@@ -36,12 +40,14 @@ function MyApp({ Component, pageProps }: AppPropsType) {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <ThemeProvider theme={theme}>
-        <Provider store={store}>
-          {/* <CssBaseline /> */}
-          <MainLayout>
-            <Component {...pageProps} />
-          </MainLayout>
-        </Provider>
+        <CookiesProvider>
+          <Provider store={store}>
+            {/* <CssBaseline /> */}
+            <MainLayout>
+              <Component {...pageProps} />
+            </MainLayout>
+          </Provider>
+        </CookiesProvider>
       </ThemeProvider>
     </>
   )
