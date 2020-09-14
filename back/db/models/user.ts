@@ -13,7 +13,6 @@ import {
   HasManyCreateAssociationMixin,
   Optional,
 } from "sequelize"
-import { Project } from "./project"
 
 export interface UserAttributes {
   id: number
@@ -26,9 +25,7 @@ export interface UserAttributes {
 // Some attributes are optional in `User.build` and `User.create` calls
 interface UserCreationAttributes extends Optional<UserAttributes, "id"> {}
 
-export class User
-  extends Model<UserAttributes, UserCreationAttributes>
-  implements UserAttributes {
+export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   public id!: number
   public email!: string
   public name!: string
@@ -83,7 +80,7 @@ export const userInit = (sequelize: Sequelize) => {
       tableName: "users",
       sequelize, // passing the `sequelize` instance is required
       modelName: "User", // We need to choose the model email
-    }
+    },
   )
   return User
 }
