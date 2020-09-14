@@ -5,6 +5,7 @@
 # 정보
 /back/.env
 .env
+erd.png
 
 package-lock.json
 

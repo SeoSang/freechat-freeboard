@@ -10,16 +10,12 @@ const authenticateToken: RequestHandler = (req: any, res, next) => {
     return next(createError(401, "Not authorized to access this route"))
   }
 
-  jwt.verify(
-    token,
-    process.env.ACCESS_TOKEN_SECRET as string,
-    (err: any, user: any) => {
-      console.log(err)
-      if (err) return res.sendStatus(403)
-      req.user = user
-      next() // pass the execution off to whatever request the client intended
-    }
-  )
+  jwt.verify(token, process.env.TOKEN_SECRET as string, (err: any, user: any) => {
+    console.log(err)
+    if (err) return res.sendStatus(403)
+    req.user = user
+    next() // pass the execution off to whatever request the client intended
+  })
 }
 
 export default authenticateToken

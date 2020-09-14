@@ -22,9 +22,7 @@ export interface DomainAttributes {
 
 // Some attributes are optional in `User.build` and `User.create` calls
 
-export class Domain
-  extends Model<DomainAttributes>
-  implements DomainAttributes {
+export class Domain extends Model<DomainAttributes> implements DomainAttributes {
   public id!: number
   public host!: string
   public type!: "admin" | "premium" | "free"
@@ -70,9 +68,9 @@ export const domainInit = (sequelize: Sequelize) => {
       collate: "utf8_general_ci", // 한글이 저장돼요
       tableName: "domains",
       sequelize, // passing the `sequelize` instance is required
-      modelName: "User",
+      modelName: "Domain",
       paranoid: true,
-    }
+    },
   )
   return Domain
 }
