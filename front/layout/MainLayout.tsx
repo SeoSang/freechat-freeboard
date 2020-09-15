@@ -6,11 +6,9 @@ import React, {
   useCallback,
 } from "react"
 import st from "./MainLayout.module.css"
-import MenuLayout from "./MenuLayout"
 import Copyright from "../components/Copyright"
 import styled from "styled-components"
 import { RootStore, useStore } from "../stores"
-import NewMenuLayout from "./NewMenuLayout"
 import {
   makeStyles,
   useTheme,
@@ -37,6 +35,7 @@ import MapIcon from "@material-ui/icons/Map"
 import MiniProfile from "./MiniProfile"
 import DeleteIcon from "@material-ui/icons/Delete"
 import { PageLink } from "../components/PageLink"
+import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount"
 
 const Footer = styled.footer`
   width: 100%;
@@ -232,6 +231,17 @@ const MainLayout: FC<{
             </ListItemIcon>
             <ListItemText primary={"쓰레기통!"} />
           </ListItem>
+        </List>
+        <Divider />
+        <List>
+          <PageLink href='/admin'>
+            <ListItem button>
+              <ListItemIcon>
+                <SupervisorAccountIcon />
+              </ListItemIcon>
+              <ListItemText primary={"관리자"} />
+            </ListItem>
+          </PageLink>
         </List>
       </Drawer>
       <main

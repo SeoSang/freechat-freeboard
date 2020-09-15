@@ -3,6 +3,7 @@ import { action, observable } from "mobx"
 import { useLocalStore, useStaticRendering } from "mobx-react"
 // Stores
 import MeStore, { initialMeState } from "./me"
+import PostStore from "./post"
 
 const isServer = typeof window === "undefined"
 let store: RootStore | null = null
@@ -15,8 +16,10 @@ export const initialRootState = {
 export class RootStore {
   constructor() {
     this.meStore = new MeStore(this)
+    this.postStore = new PostStore(this)
   }
   @observable meStore: MeStore
+  @observable postStore: PostStore
 }
 
 export default function initializeStore() {

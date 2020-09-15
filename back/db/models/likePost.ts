@@ -1,13 +1,15 @@
 import { Sequelize, Model, DataTypes } from "sequelize"
 
 export interface LikePostAttributes {
-  id: number
+  id?: number
 }
 
 // Some attributes are optional in `User.build` and `User.create` calls
 
-export class LikePost extends Model<LikePostAttributes> implements LikePostAttributes {
-  public id!: number
+export class LikePost
+  extends Model<LikePostAttributes>
+  implements LikePostAttributes {
+  public id?: number
 
   // timestamps!
   public readonly createdAt!: Date
@@ -27,7 +29,7 @@ export const likePostInit = (sequelize: Sequelize) => {
       tableName: "likePosts",
       sequelize, // passing the `sequelize` instance is required
       modelName: "LikePosts", // We need to choose the model email
-    },
+    }
   )
   return LikePost
 }

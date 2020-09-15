@@ -3,7 +3,7 @@ import React, { useState } from "react"
 // @material-ui/core components
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles"
 import InputLabel from "@material-ui/core/InputLabel"
-const Editor = dynamic(
+const Editor: any = dynamic(
   () => (import("react-draft-wysiwyg") as any).then((mod: any) => mod.Editor),
   { ssr: false }
 )
@@ -61,8 +61,8 @@ const addPost = () => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
   const [category, setCategory] = useState<any>(10)
 
-  const onEditorStateChange = (editorState: EditorState) => {
-    setEditorState(editorState)
+  const onEditorStateChange = (es: EditorState) => {
+    setEditorState(es)
   }
   const onCategoryChange = (e: React.ChangeEvent<{ value: unknown }>) => {
     setCategory(e.target.value)

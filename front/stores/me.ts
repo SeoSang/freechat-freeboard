@@ -1,8 +1,13 @@
-import { UserAttributes } from "./../../back-api/db/models/user"
 import { observable, action, computed, reaction } from "mobx"
-import { createContext } from "react"
 import { RootStore, useStore } from "."
-import { useObserver } from "mobx-react"
+
+export interface UserAttributes {
+  id: number
+  email: string
+  password: string
+  name: string
+  nickname: string | null
+}
 
 export const initialMeState = {
   id: -1,

@@ -15,7 +15,7 @@ import {
 } from "sequelize"
 
 export interface UserAttributes {
-  id: number
+  id?: number
   email: string
   password: string
   name: string
@@ -25,8 +25,10 @@ export interface UserAttributes {
 // Some attributes are optional in `User.build` and `User.create` calls
 interface UserCreationAttributes extends Optional<UserAttributes, "id"> {}
 
-export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
-  public id!: number
+export class User
+  extends Model<UserAttributes, UserCreationAttributes>
+  implements UserAttributes {
+  public id?: number
   public email!: string
   public name!: string
   public nickname!: string | null
@@ -80,7 +82,7 @@ export const userInit = (sequelize: Sequelize) => {
       tableName: "users",
       sequelize, // passing the `sequelize` instance is required
       modelName: "User", // We need to choose the model email
-    },
+    }
   )
   return User
 }

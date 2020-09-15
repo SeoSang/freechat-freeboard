@@ -5,6 +5,7 @@ import { postInit } from "./models/post"
 import { commentInit } from "./models/comment"
 import { likeCommentInit } from "./models/likeComment"
 import { likePostInit } from "./models/likePost"
+import { categoryInit } from "./models/category"
 const env = process.env.NODE_ENV || "development"
 const config = require("../config/config.js")[env]
 
@@ -19,14 +20,17 @@ const User = userInit(sequelize)
 const Domain = domainInit(sequelize)
 const Post = postInit(sequelize)
 const Comment = commentInit(sequelize)
+const Category = categoryInit(sequelize)
 // const LikeComment = likeCommentInit(sequelize)
 // const LikePost = likePostInit(sequelize)
 
 User.hasMany(Domain)
 User.hasMany(Post)
 User.hasMany(Comment)
+Category.hasMany(Post)
 Post.hasMany(Comment)
 Post.belongsTo(User)
+Post.belongsTo(Category)
 Post.belongsToMany(User, { through: "likePost" })
 Comment.belongsTo(Post)
 Comment.belongsToMany(User, { through: "likeComment" })
@@ -42,6 +46,7 @@ const db = {
   Domain,
   Comment,
   Post,
+  Category,
   sequelize,
 }
 

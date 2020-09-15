@@ -14,7 +14,7 @@ import {
 import { User } from "./user"
 
 export interface DomainAttributes {
-  id: number
+  id?: number
   host: string
   type: "admin" | "premium" | "free"
   clientSecret: string
@@ -22,8 +22,10 @@ export interface DomainAttributes {
 
 // Some attributes are optional in `User.build` and `User.create` calls
 
-export class Domain extends Model<DomainAttributes> implements DomainAttributes {
-  public id!: number
+export class Domain
+  extends Model<DomainAttributes>
+  implements DomainAttributes {
+  public id?: number
   public host!: string
   public type!: "admin" | "premium" | "free"
   public clientSecret!: string
@@ -70,7 +72,7 @@ export const domainInit = (sequelize: Sequelize) => {
       sequelize, // passing the `sequelize` instance is required
       modelName: "Domain",
       paranoid: true,
-    },
+    }
   )
   return Domain
 }

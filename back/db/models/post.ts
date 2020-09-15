@@ -13,7 +13,7 @@ import {
 import { Comment } from "./comment"
 
 export interface PostAttributes {
-  id: number
+  id?: number
   title: string
   text: string
 }
@@ -21,8 +21,10 @@ export interface PostAttributes {
 // Some attributes are optional in `User.build` and `User.create` calls
 interface PostCreationAttributes extends Optional<PostAttributes, "id"> {}
 
-export class Post extends Model<PostAttributes, PostCreationAttributes> implements PostAttributes {
-  public id!: number
+export class Post
+  extends Model<PostAttributes, PostCreationAttributes>
+  implements PostAttributes {
+  public id?: number
   public title!: string
   public text!: string
 
@@ -64,7 +66,7 @@ export const postInit = (sequelize: Sequelize) => {
       tableName: "posts",
       sequelize, // passing the `sequelize` instance is required
       modelName: "Post", // We need to choose the model email
-    },
+    }
   )
   return Post
 }
