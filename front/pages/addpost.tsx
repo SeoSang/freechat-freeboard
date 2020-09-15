@@ -89,10 +89,14 @@ const addPost = () => {
   const onCategoryChange = (e: React.ChangeEvent<{ value: unknown }>) => {
     setCategory(e.target.value)
   }
-  const onClickUpload = () => {
+  const onClickUpload = async () => {
+    if (title.trim() === "") return alert("제목을 입력해주세요")
+    if (editorState === EditorState.createEmpty())
+      return alert("내용을 입력해주세요")
+    if (category === "") return alert("카테고리를 골라주세요")
     try {
       const text = convertToRaw(editorState.getCurrentContent())
-      postStore.addPost(category, title, text)
+      await postStore.addPost(category, title, text)
       alert("포스팅 성공!.")
       router.push("/")
     } catch (e) {

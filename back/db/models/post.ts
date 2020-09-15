@@ -65,8 +65,8 @@ export const postInit = (sequelize: Sequelize) => {
       },
     },
     {
-      charset: "utf8",
-      collate: "utf8_general_ci", // 한글이 저장돼요
+      charset: "utf8mb4",
+      collate: "utf8mb4_general_ci", // 한글이 저장돼요
       tableName: "posts",
       sequelize, // passing the `sequelize` instance is required
       modelName: "Post", // We need to choose the model email

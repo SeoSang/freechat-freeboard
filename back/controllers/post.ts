@@ -10,7 +10,7 @@ export const addPost = asyncHandler(
     const title = req.body.title
     const categoryId = req.body.categoryId
     const text = req.body.text
-    const newPost = posts.create({
+    const newPost = await posts.create({
       title,
       text,
       UserId: req.user.id,
