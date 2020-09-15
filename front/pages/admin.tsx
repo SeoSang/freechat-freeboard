@@ -1,13 +1,20 @@
 import { Button, Input, Typography } from "@material-ui/core"
+import { observer } from "mobx-react"
+import { useRouter } from "next/dist/client/router"
 import React, { useEffect, useState } from "react"
 import { useStore } from "../stores"
 import { FlexDiv } from "../styles/div"
 
 const admin = () => {
   const [category, setCategory] = useState("")
-  const { postStore } = useStore()
+  const { meStore, postStore } = useStore()
+  const router = useRouter()
 
   useEffect(() => {
+    if (meStore.id >= 3 || meStore.id <= 0) {
+      alert("권한이 없습니다!")
+      router.push("/")
+    }
     postStore.getCategories()
   }, [])
 
@@ -32,4 +39,4 @@ const admin = () => {
   )
 }
 
-export default admin
+export default observer(admin)

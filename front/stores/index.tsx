@@ -20,6 +20,11 @@ export class RootStore {
   }
   @observable meStore: MeStore
   @observable postStore: PostStore
+
+  @action init() {
+    this.meStore = new MeStore(this)
+    this.postStore = new PostStore(this)
+  }
 }
 
 export default function initializeStore() {

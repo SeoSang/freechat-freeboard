@@ -7,7 +7,7 @@ const router = express.Router()
 
 router
   .route("/")
-  .get(isLoggedIn, isAdmin, getAllCategories)
+  .get(isLoggedIn, getAllCategories)
   .post(isLoggedIn, isAdmin, addCategory)
 
 export default router

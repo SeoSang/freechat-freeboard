@@ -11,6 +11,7 @@ import {
   Optional,
 } from "sequelize"
 import { Comment } from "./comment"
+import { UserAttributes } from "./user"
 
 export interface PostAttributes {
   id?: number
@@ -19,7 +20,10 @@ export interface PostAttributes {
 }
 
 // Some attributes are optional in `User.build` and `User.create` calls
-interface PostCreationAttributes extends Optional<PostAttributes, "id"> {}
+interface PostCreationAttributes extends Optional<PostAttributes, "id"> {
+  UserId: number
+  CategoryId: number
+}
 
 export class Post
   extends Model<PostAttributes, PostCreationAttributes>

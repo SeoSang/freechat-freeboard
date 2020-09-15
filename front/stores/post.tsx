@@ -5,23 +5,31 @@ import { BACKEND_URL } from "../util/util"
 
 export const initialPostState = {
   categories: [],
+  posts: [],
   getCategoriesError: "",
   addCategoriesError: "",
-  posts: [],
+  getPostError: "",
+  getPostsError: "",
+  addPostError: "",
+  addPostSuccess: false,
 }
 
 class PostStore {
   @observable categories = initialPostState.categories
+  @observable posts = initialPostState.posts
   @observable getCategoriesError = initialPostState.getCategoriesError
   @observable addCategoriesError = initialPostState.addCategoriesError
-  @observable posts = initialPostState.posts
+  @observable getPostError = initialPostState.getPostError
+  @observable getPostsError = initialPostState.getPostsError
+  @observable addPostError = initialPostState.addPostError
+  @observable addPostSuccess = initialPostState.addPostSuccess
   public root
 
   constructor(root: RootStore) {
     this.root = root
   }
 
-  // hydrate(serializedStore) {}
+  // 카테고리
   getCategories = flow(function* () {
     try {
       const result = yield axios.get(`${BACKEND_URL}/api/category`, {
@@ -47,6 +55,47 @@ class PostStore {
       yield console.log(e)
       this.addCategoriesError = e
     }
+  })
+
+  // 포스트
+  getPosts = flow(function* () {
+    try {
+      const result = yield axios.get(`${BACKEND_URL}/api/posts`, {
+        withCredentials: true,
+      })
+      yield console.log("getPosts result => ", result)
+      this.posts = result.data
+    } catch (e) {
+      yield console.log(e)
+      this.getPostsError = e
+    }
+  })
+
+  getPost = flow(function* () {
+    try {
+      const result = yield axios.get(`${BACKEND_URL}/api/post`, {
+        withCredentials: true,
+      })
+      yield console.log("getPost result => ", result)
+      this.post = result.data
+    } catch (e) {
+      yield console.log(e)
+      this.getPostError = e
+    }
+  })
+
+  addPost = flow(function* (categoryId: number, title: string, text: any) {
+    const data = {
+      categoryId,
+      title,
+      text: JSON.stringify(text),
+    }
+    const result = yield axios.post(`${BACKEND_URL}/api/post`, data, {
+      withCredentials: true,
+    })
+    yield console.log("addPost result => ", result)
+    this.posts.push(result.data)
+    this.addPostSuccess = true
   })
 
   @computed get info() {
