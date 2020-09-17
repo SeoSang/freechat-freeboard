@@ -19,3 +19,43 @@ export const addPost = asyncHandler(
     res.status(200).json("포스팅 성공!")
   }
 )
+
+export const getPost = asyncHandler(
+  async (req: LoginRequest, res: Response, next: NextFunction) => {
+    const postId = req.params.id
+    const post = await posts.findOne({
+      where: {
+        id: postId,
+      },
+      include: [
+        {
+          model: db.User as any,
+          attributes: ["id", "nickname"],
+        },
+        {
+          model: db.Comment as any,
+          attributes: ["id", "text"],
+          include: [
+            {
+              model: db.User as any,
+            },
+          ],
+        },
+        {
+          model: db.Category as any,
+          attributes: ["id", "name"],
+        },
+      ],
+    })
+    res.status(200).json(post)
+  }
+)
+
+export const getPosts = asyncHandler(
+  async (req: LoginRequest, res: Response, next: NextFunction) => {
+    const allPost = await posts.findAll({
+      attributes: ["id", "title"],
+    })
+    res.status(200).json(allPost)
+  }
+)

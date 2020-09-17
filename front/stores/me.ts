@@ -1,13 +1,6 @@
 import { observable, action, computed, reaction } from "mobx"
 import { RootStore, useStore } from "."
-
-export interface UserAttributes {
-  id: number
-  email: string
-  password: string
-  name: string
-  nickname: string | null
-}
+import { UserAttributes } from "../types/user"
 
 export const initialMeState = {
   id: -1,

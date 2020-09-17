@@ -7,6 +7,7 @@ import morgan from "morgan"
 import nunjucks from "nunjucks"
 import userRouter from "./routes/user"
 import postRouter from "./routes/post"
+import postsRouter from "./routes/posts"
 import categoryRouter from "./routes/category"
 import session from "express-session"
 
@@ -47,6 +48,7 @@ app.use(
 
 app.use("/api/user", userRouter)
 app.use("/api/post", postRouter)
+app.use("/api/posts", postsRouter)
 app.use("/api/category", categoryRouter)
 
 app.use((req, res, next) => {

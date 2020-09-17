@@ -2,10 +2,12 @@ import { observable, action, computed, flow } from "mobx"
 import { RootStore, useStore } from "."
 import axios from "axios"
 import { BACKEND_URL } from "../util/util"
+import { PostsPost, PostData } from "../types/post"
 
 export const initialPostState = {
   categories: [],
-  posts: [],
+  post: {} as PostData,
+  posts: [] as PostsPost[],
   getCategoriesError: "",
   addCategoriesError: "",
   getPostError: "",
@@ -16,6 +18,7 @@ export const initialPostState = {
 
 class PostStore {
   @observable categories = initialPostState.categories
+  @observable post = initialPostState.post
   @observable posts = initialPostState.posts
   @observable getCategoriesError = initialPostState.getCategoriesError
   @observable addCategoriesError = initialPostState.addCategoriesError
@@ -71,9 +74,9 @@ class PostStore {
     }
   })
 
-  getPost = flow(function* () {
+  getPost = flow(function* (postId: string) {
     try {
-      const result = yield axios.get(`${BACKEND_URL}/api/post`, {
+      const result = yield axios.get(`${BACKEND_URL}/api/post/${postId}`, {
         withCredentials: true,
       })
       yield console.log("getPost result => ", result)

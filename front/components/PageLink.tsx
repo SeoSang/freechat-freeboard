@@ -1,11 +1,16 @@
 import { ReactElement } from "react"
 import Link from "next/link"
 
+interface HrefOption {
+  pathname: string
+  query?: { [key: string]: string }
+}
+
 export const PageLink = ({
   href,
   children,
 }: {
-  href: string
+  href: string | HrefOption
   children: ReactElement
 }) => {
   return (

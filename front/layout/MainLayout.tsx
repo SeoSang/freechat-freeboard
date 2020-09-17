@@ -208,6 +208,14 @@ const MainLayout: FC<{
               <ListItemText primary={"게시판"} />
             </ListItem>
           </PageLink>
+          <PageLink href='posts'>
+            <ListItem button>
+              <ListItemIcon>
+                <AssignmentIcon />
+              </ListItemIcon>
+              <ListItemText primary={"게시판_테스트용"} />
+            </ListItem>
+          </PageLink>
           <PageLink href='chat'>
             <ListItem button>
               <ListItemIcon>
