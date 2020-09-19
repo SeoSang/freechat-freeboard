@@ -1,5 +1,5 @@
 import axios from "axios"
-import React, { useState, useContext } from "react"
+import React, { useState, useContext, useEffect } from "react"
 import { useRouter } from "next/dist/client/router"
 import Copyright from "../components/Copyright"
 import { useForm } from "react-hook-form"
@@ -8,6 +8,8 @@ import { BACKEND_URL } from "../util/util"
 import { MainUserData } from "../types/user"
 // mobx
 import { inject, observer } from "mobx-react"
+// Type
+import { LoginFormValues } from "../types/user"
 // material-ui
 import Avatar from "@material-ui/core/Avatar"
 import Button from "@material-ui/core/Button"
@@ -24,11 +26,6 @@ import { makeStyles } from "@material-ui/core/styles"
 import Container from "@material-ui/core/Container"
 import { NextPage } from "next"
 import { useStore } from "../stores"
-
-interface LoginFormValues {
-  email: string
-  password: string
-}
 
 const LoginFormValidator = (errors: any) => {
   if (errors.email) {
@@ -67,23 +64,21 @@ const Login = () => {
   const [validateText, setValidateText] = useState<string>()
   const { meStore } = useStore()
 
+  useEffect(() => {
+    if (meStore.isLogined) {
+      alert("로그인이 된 상태이므로 홈화면으로 전환됩니다.")
+      router.push("/")
+    }
+  }, [meStore, meStore.isLogined])
+
   const onSubmit = async (data: LoginFormValues) => {
     for (const [key, value] of Object.entries(data)) {
-      console.log(value)
       if (value == "") {
         setValidateText(`${key}를 입력해주세요!`)
         return
       }
     }
-    const response = await axios.post(`${BACKEND_URL}/api/user/login`, data, {
-      withCredentials: true,
-    })
-    const me: MainUserData = response.data
-    if (me) {
-      alert(`${me.nickname} 님 로그인되었습니다!`)
-      meStore.setMe(me)
-      router.push("/")
-    }
+    await meStore.login(data)
     return
   }
 
@@ -133,7 +128,8 @@ const Login = () => {
             fullWidth
             variant='contained'
             color='primary'
-            className={classes.submit}>
+            className={classes.submit}
+          >
             로그인
           </Button>
           <Grid container>
@@ -157,9 +153,6 @@ const Login = () => {
           </Grid>
         </form>
       </div>
-      <Box mt={8}>
-        <Copyright />
-      </Box>
     </Container>
   )
 }

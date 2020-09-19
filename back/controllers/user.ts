@@ -49,7 +49,7 @@ export const logout = asyncHandler(async (req: Request, res: Response, next: Nex
   return res
     .status(200)
     .clearCookie("token", CookieOptions)
-    .send("logout complete")
+    .json("logout complete")
 })
 
 export const register = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {

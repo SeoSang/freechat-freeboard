@@ -1,12 +1,6 @@
 import React from "react"
-import {
-  IconButton,
-  Menu,
-  MenuItem,
-  Typography,
-  makeStyles,
-} from "@material-ui/core"
-import { observer, inject } from "mobx-react"
+import { IconButton, Menu, MenuItem, Typography, makeStyles } from "@material-ui/core"
+import { observer } from "mobx-react"
 import AccountCircle from "@material-ui/icons/AccountCircle"
 import { useStore } from "../stores"
 
@@ -28,6 +22,9 @@ const MiniProfile = () => {
   const handleClose = () => {
     setAnchorEl(null)
   }
+  const onClickLogout = () => {
+    meStore.logOut()
+  }
 
   return (
     <div>
@@ -36,7 +33,8 @@ const MiniProfile = () => {
         aria-controls='menu-appbar'
         aria-haspopup='true'
         onClick={handleMenu}
-        color='inherit'>
+        color='inherit'
+      >
         <AccountCircle />
       </IconButton>
       <Menu
@@ -52,15 +50,17 @@ const MiniProfile = () => {
           horizontal: "right",
         }}
         open={open}
-        onClose={handleClose}>
+        onClose={handleClose}
+      >
         <Typography className={st.profileMenu} variant='body1'>
           안녕하세요 <br />
           {meStore && meStore.nickname} 님!
         </Typography>
         <MenuItem onClick={handleClose}>프로필 페이지</MenuItem>
+        <MenuItem onClick={onClickLogout}>로그아웃</MenuItem>
       </Menu>
     </div>
   )
 }
 
-export default inject("store")(observer(MiniProfile))
+export default observer(MiniProfile)

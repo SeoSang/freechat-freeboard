@@ -1,20 +1,10 @@
 import clsx from "clsx"
-import React, {
-  FC,
-  ReactComponentElement,
-  ReactElement,
-  useCallback,
-} from "react"
+import React, { FC, ReactComponentElement, ReactElement, useCallback, useEffect } from "react"
 import st from "./MainLayout.module.css"
 import Copyright from "../components/Copyright"
 import styled from "styled-components"
 import { RootStore, useStore } from "../stores"
-import {
-  makeStyles,
-  useTheme,
-  Theme,
-  createStyles,
-} from "@material-ui/core/styles"
+import { makeStyles, useTheme, Theme, createStyles } from "@material-ui/core/styles"
 import Drawer from "@material-ui/core/Drawer"
 import CssBaseline from "@material-ui/core/CssBaseline"
 import AppBar from "@material-ui/core/AppBar"
@@ -36,6 +26,8 @@ import MiniProfile from "./MiniProfile"
 import DeleteIcon from "@material-ui/icons/Delete"
 import { PageLink } from "../components/PageLink"
 import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount"
+import { observer } from "mobx-react"
+import { useRouter } from "next/dist/client/router"
 
 const Footer = styled.footer`
   width: 100%;
@@ -111,7 +103,7 @@ const useStyles = makeStyles((theme: Theme) =>
       display: "flex",
       marginLeft: "auto",
     },
-  })
+  }),
 )
 
 const MainLayout: FC<{
@@ -121,6 +113,12 @@ const MainLayout: FC<{
   const theme = useTheme()
   const [open, setOpen] = React.useState(false)
   const { meStore } = useStore()
+  const router = useRouter()
+
+  useEffect(() => {
+    router.push("/")
+    meStore.initialize()
+  }, [meStore, meStore.isLogouted])
 
   const handleDrawerOpen = () => {
     setOpen(true)
@@ -141,14 +139,16 @@ const MainLayout: FC<{
         position='fixed'
         className={clsx(classes.appBar, {
           [classes.appBarShift]: open,
-        })}>
+        })}
+      >
         <Toolbar>
           <IconButton
             color='inherit'
             aria-label='open drawer'
             onClick={handleDrawerOpen}
             edge='start'
-            className={clsx(classes.menuButton, open && classes.hide)}>
+            className={clsx(classes.menuButton, open && classes.hide)}
+          >
             <MenuIcon />
           </IconButton>
           <Typography variant='h6' noWrap>
@@ -157,23 +157,19 @@ const MainLayout: FC<{
           <div className={classes.menuRightDiv}>
             <PageLink href='/login'>
               <Typography
-                className={clsx(
-                  classes.menuRightContent,
-                  isLoggedIn() && classes.hide
-                )}
+                className={clsx(classes.menuRightContent, isLoggedIn() && classes.hide)}
                 variant='h6'
-                noWrap>
+                noWrap
+              >
                 로그인
               </Typography>
             </PageLink>
             <PageLink href='/register'>
               <Typography
-                className={clsx(
-                  classes.menuRightContent,
-                  isLoggedIn() && classes.hide
-                )}
+                className={clsx(classes.menuRightContent, isLoggedIn() && classes.hide)}
                 variant='h6'
-                noWrap>
+                noWrap
+              >
                 회원가입
               </Typography>
             </PageLink>
@@ -188,14 +184,11 @@ const MainLayout: FC<{
         open={open}
         classes={{
           paper: classes.drawerPaper,
-        }}>
+        }}
+      >
         <div className={classes.drawerHeader}>
           <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "ltr" ? (
-              <ChevronLeftIcon />
-            ) : (
-              <ChevronRightIcon />
-            )}
+            {theme.direction === "ltr" ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
         </div>
         <Divider />
@@ -255,7 +248,8 @@ const MainLayout: FC<{
       <main
         className={clsx(classes.content, {
           [classes.contentShift]: open,
-        })}>
+        })}
+      >
         <div className={classes.drawerHeader} />
         {children}
         <Footer>
@@ -266,4 +260,4 @@ const MainLayout: FC<{
   )
 }
 
-export default MainLayout
+export default observer(MainLayout)

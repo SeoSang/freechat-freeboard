@@ -6,6 +6,11 @@ export interface UserAttributes {
   nickname: string | null
 }
 
+export interface LoginFormValues {
+  email: string
+  password: string
+}
+
 export interface lightUserData {
   id: number
   nickname: string
