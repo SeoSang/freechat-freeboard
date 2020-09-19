@@ -68,8 +68,8 @@ export const login = asyncHandler(async (req: Request, res: Response, next: Next
 export const logout = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   return res
     .status(200)
-    .clearCookie("token", CookieOptions)
-    .json("logout complete")
+    .clearCookie("token", { path: "/" })
+    .send("logout complete")
 })
 
 export const register = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {

@@ -79,7 +79,7 @@ class MeStore {
 
   @action logOut = flow(function*() {
     yield axios
-      .post(`${BACKEND_URL}/api/user/logout`)
+      .post(`${BACKEND_URL}/api/user/logout`, null, { withCredentials: true })
       .then((res) => {
         alert("로그아웃 성공!!!")
         this.id = initialMeState.id

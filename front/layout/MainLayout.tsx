@@ -26,8 +26,11 @@ import MiniProfile from "./MiniProfile"
 import DeleteIcon from "@material-ui/icons/Delete"
 import { PageLink } from "../components/PageLink"
 import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount"
+// mobx
 import { observer } from "mobx-react"
 import { useRouter } from "next/dist/client/router"
+// cookie
+import cookie from "react-cookies"
 
 const Footer = styled.footer`
   width: 100%;
@@ -116,6 +119,7 @@ const MainLayout: FC<{
   const router = useRouter()
 
   useEffect(() => {
+    cookie.remove("token", { path: "/" })
     router.push("/")
     meStore.initialize()
   }, [meStore, meStore.isLogouted])
