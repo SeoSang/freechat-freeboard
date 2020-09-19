@@ -2,6 +2,6 @@ import { Request } from "express"
 
 export interface AdminRequest {}
 
-export interface LoginRequest extends Request {
-  user: { id: number }
+export interface LoginedRequest extends Request {
+  user: { id: number; name: string; nickname: string; email: string }
 }

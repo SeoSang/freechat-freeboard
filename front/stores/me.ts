@@ -43,6 +43,14 @@ class MeStore {
     this.isLogined = true
   }
 
+  @action loadMe = flow(function*() {
+    try {
+      const response = yield axios.get(`${BACKEND_URL}/api/user`, { withCredentials: true })
+      const me: MainUserData = response.data
+      yield this.setMe(me)
+    } catch (e) {}
+  })
+
   @action login = flow(function*(data: LoginFormValues) {
     try {
       const response = yield axios.post(`${BACKEND_URL}/api/user/login`, data, {

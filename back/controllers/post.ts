@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from "express"
 import asyncHandler from "../middlewares/async"
 import db from "../db"
-import { LoginRequest } from "../types"
+import { LoginedRequest } from "../types"
 
 const posts = db.Post
 
 export const addPost = asyncHandler(
-  async (req: LoginRequest, res: Response, next: NextFunction) => {
+  async (req: LoginedRequest, res: Response, next: NextFunction) => {
     const title = req.body.title
     const categoryId = req.body.categoryId
     const text = req.body.text
@@ -17,11 +17,11 @@ export const addPost = asyncHandler(
       CategoryId: categoryId,
     })
     res.status(200).json("포스팅 성공!")
-  }
+  },
 )
 
 export const getPost = asyncHandler(
-  async (req: LoginRequest, res: Response, next: NextFunction) => {
+  async (req: LoginedRequest, res: Response, next: NextFunction) => {
     const postId = req.params.id
     const post = await posts.findOne({
       where: {
@@ -48,14 +48,14 @@ export const getPost = asyncHandler(
       ],
     })
     res.status(200).json(post)
-  }
+  },
 )
 
 export const getPosts = asyncHandler(
-  async (req: LoginRequest, res: Response, next: NextFunction) => {
+  async (req: LoginedRequest, res: Response, next: NextFunction) => {
     const allPost = await posts.findAll({
       attributes: ["id", "title"],
     })
     res.status(200).json(allPost)
-  }
+  },
 )

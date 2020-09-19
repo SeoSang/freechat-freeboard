@@ -3,7 +3,7 @@ import React, { useMemo, useEffect } from "react"
 import { AppPropsType } from "next/dist/next-server/lib/utils"
 import Head from "next/head"
 // mobx
-import { Provider } from "mobx-react"
+import { observer, Provider } from "mobx-react"
 // material-ui
 import { ThemeProvider } from "@material-ui/styles"
 import CssBaseline from "@material-ui/core/CssBaseline"
@@ -29,14 +29,16 @@ function MyApp({ Component, pageProps }: AppPropsType) {
     return rootStore
   }, [])
 
+  useEffect(() => {
+    if (store.meStore.id != -1) return
+    store.meStore.loadMe()
+  }, [])
+
   return (
     <>
       <Head>
         <title>make-everything</title>
-        <meta
-          name='viewport'
-          content='minimum-scale=1, initial-scale=1, width=device-width'
-        />
+        <meta name='viewport' content='minimum-scale=1, initial-scale=1, width=device-width' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <ThemeProvider theme={theme}>
@@ -53,4 +55,4 @@ function MyApp({ Component, pageProps }: AppPropsType) {
   )
 }
 
-export default MyApp
+export default observer(MyApp)

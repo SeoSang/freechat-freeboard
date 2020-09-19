@@ -8,10 +8,26 @@ import express, { Response, Request, NextFunction, RequestHandler } from "expres
 const router = express.Router({ mergeParams: true })
 import asyncHandler from "../middlewares/async"
 import bcrypt from "bcrypt"
+import { LoginedRequest } from "../types"
 
 dotenv.config()
 
 const users = db.User
+
+export const loadMe = asyncHandler(
+  async (req: LoginedRequest, res: Response, next: NextFunction) => {
+    if (!req.user.id) {
+      next(createError(401, "잘못된 접근, 토큰 만료 예상"))
+    }
+    const exUser = {
+      id: req.user.id,
+      email: req.user.email,
+      name: req.user.name,
+      nickname: req.user.nickname,
+    }
+    res.status(200).json(exUser)
+  },
+)
 
 export const login = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   if (!req.body.email || !req.body.password) {
@@ -31,9 +47,13 @@ export const login = asyncHandler(async (req: Request, res: Response, next: Next
 
   if (!result) return next(createError(403, "비밀번호가 틀립니다!"))
 
-  let token = jwt.sign({ id: exUser.id }, process.env.TOKEN_SECRET!, {
-    expiresIn: process.env.TOKEN_EXPIRE,
-  })
+  let token = jwt.sign(
+    { id: exUser.id, email: exUser.email, name: exUser.name, nickname: exUser.nickname },
+    process.env.TOKEN_SECRET!,
+    {
+      expiresIn: process.env.TOKEN_EXPIRE,
+    },
+  )
   const resUser: UserAttributes | any = exUser.toJSON()
   if (resUser.password) {
     resUser.password = "deleted"
@@ -66,6 +86,16 @@ export const register = asyncHandler(async (req: Request, res: Response, next: N
     nickname: req.body.nickname,
     password: hashedPassword,
   })
+  let token = jwt.sign(
+    { id: newUser.id, email: newUser.email, name: newUser.name, nickname: newUser.nickname },
+    process.env.TOKEN_SECRET!,
+    {
+      expiresIn: process.env.TOKEN_EXPIRE,
+    },
+  )
   newUser.password = "deleted"
-  return res.status(200).json(newUser)
+  return res
+    .status(200)
+    .cookie("token", token, CookieOptions)
+    .json(newUser)
 })
