@@ -28,11 +28,11 @@ app.use(
   cors({
     origin: process.env.CORS_ORIGIN,
     credentials: true,
-  })
+  }),
 )
 app.use(express.urlencoded({ extended: true })) // true면 qs 모듈
 app.use(express.json()) // 알아서 json 파일 파싱해줌
-app.use(cookieParser("password"))
+app.use(cookieParser())
 const ss: string = process.env.SESSION_SECRET ? process.env.SESSION_SECRET : ""
 app.use(
   session({
@@ -43,7 +43,7 @@ app.use(
       secure: "auto",
       httpOnly: true,
     },
-  })
+  }),
 )
 
 app.use("/api/user", userRouter)

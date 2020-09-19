@@ -20,9 +20,7 @@ const post = () => {
 
   const text = useMemo(() => {
     const editorState = postStore.post.text
-      ? EditorState.createWithContent(
-          convertFromRaw(JSON.parse(postStore.post.text))
-        )
+      ? EditorState.createWithContent(convertFromRaw(JSON.parse(postStore.post.text)))
       : EditorState.createEmpty()
     return editorState
   }, [postStore.post])
