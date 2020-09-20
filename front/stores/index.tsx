@@ -4,6 +4,7 @@ import { useLocalStore, useStaticRendering } from "mobx-react"
 // Stores
 import MeStore, { initialMeState } from "./me"
 import PostStore from "./post"
+import { MainUserData } from "../types/user"
 
 const isServer = typeof window === "undefined"
 let store: RootStore | null = null
@@ -14,25 +15,26 @@ export const initialRootState = {
 }
 
 export class RootStore {
-  constructor() {
-    this.meStore = new MeStore(this)
+  constructor(meData: MainUserData | null = null) {
+    this.meStore = new MeStore(this, meData)
     this.postStore = new PostStore(this)
   }
   @observable meStore: MeStore
   @observable postStore: PostStore
 
   @action init() {
-    this.meStore = new MeStore(this)
+    this.meStore = new MeStore(this, null)
     this.postStore = new PostStore(this)
   }
 }
 
-export default function initializeStore() {
+export default function initializeStore(meData: MainUserData | null = null) {
   if (isServer) {
-    return new RootStore()
+    return new RootStore(meData)
   }
-  if (store === null) {
-    store = new RootStore()
+  if (store === null || meData) {
+    console.log("새로 생성")
+    store = new RootStore(meData)
   }
 
   return store

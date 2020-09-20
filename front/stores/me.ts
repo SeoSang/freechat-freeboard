@@ -22,8 +22,9 @@ class MeStore {
   @observable isLogouted = initialMeState.isLogouted
   public root
 
-  constructor(root: RootStore) {
+  constructor(root: RootStore, meData: MainUserData | null) {
     this.root = root
+    if (meData) this.setMe(meData)
   }
 
   @action initialize = () => {

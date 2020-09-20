@@ -59,3 +59,13 @@ export const getPosts = asyncHandler(
     res.status(200).json(allPost)
   },
 )
+
+// export const getPostsByCategory = asyncHandler(
+//   async (req: LoginedRequest, res: Response, next: NextFunction) => {
+//     const allPost = await posts.findAll({
+//       group : ["CategoryId"],
+//       attributes: ["id", "title"],
+//     })
+//     res.status(200).json(allPost)
+//   },
+// )

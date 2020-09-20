@@ -119,9 +119,11 @@ const MainLayout: FC<{
   const router = useRouter()
 
   useEffect(() => {
-    cookie.remove("token", { path: "/" })
-    router.push("/")
-    meStore.initialize()
+    if (meStore.isLogouted) {
+      cookie.remove("token", { path: "/" })
+      router.push("/")
+      meStore.initialize()
+    }
   }, [meStore, meStore.isLogouted])
 
   const handleDrawerOpen = () => {
@@ -197,12 +199,12 @@ const MainLayout: FC<{
         </div>
         <Divider />
         <List>
-          <PageLink href='userboard'>
+          <PageLink href='addpost'>
             <ListItem button>
               <ListItemIcon>
                 <AssignmentIcon />
               </ListItemIcon>
-              <ListItemText primary={"게시판"} />
+              <ListItemText primary={"게시글 추가"} />
             </ListItem>
           </PageLink>
           <PageLink href='posts'>

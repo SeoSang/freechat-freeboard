@@ -5,23 +5,17 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core/styles"
 import InputLabel from "@material-ui/core/InputLabel"
 const Editor: any = dynamic(
   () => (import("react-draft-wysiwyg") as any).then((mod: any) => mod.Editor),
-  { ssr: false }
+  { ssr: false },
 )
 import { EditorState, convertToRaw } from "draft-js"
-import {
-  Button,
-  FormControl,
-  FormHelperText,
-  Input,
-  MenuItem,
-  Select,
-} from "@material-ui/core"
+import { Button, FormControl, FormHelperText, Input, MenuItem, Select } from "@material-ui/core"
 import axios from "axios"
 import { BACKEND_URL } from "../util/util"
 import { observer } from "mobx-react"
 import { useStore } from "../stores"
 import { FlexDiv } from "../styles/div"
 import { useRouter } from "next/dist/client/router"
+import { MainUserData } from "../types/user"
 // core components
 
 // const editorStyle: React.CSSProperties = {
@@ -64,10 +58,10 @@ const useStyle = makeStyles((theme: Theme) =>
     titleInput: {
       margin: theme.spacing(0, 2),
     },
-  })
+  }),
 )
 
-const addPost = () => {
+const addPost = ({ meData }: { meData: MainUserData }) => {
   const classes = useStyle()
   const { meStore, postStore } = useStore()
   const [title, setTitle] = useState("")
@@ -76,11 +70,25 @@ const addPost = () => {
   const router = useRouter()
 
   useEffect(() => {
-    if (meStore.id < 0) {
-      alert("로그인이 필요합니다!")
-      router.push("/")
-    }
+    console.log("addpost useEffect")
+
+    // /* 1번째 방법
+    const timer = setTimeout(() => {
+      if (meStore.id < 0) {
+        alert("로그인이 필요합니다!")
+        router.push("/")
+      }
+    }, 1000)
     postStore.getCategories()
+    return () => {
+      clearTimeout(timer) // 이 전의 timer를 clear합니다.
+    }
+    // */
+    // console.log(meData)
+    // if (!meData) {
+    //   alert("로그인이 필요합니다!")
+    //   router.push("/")
+    // }
   }, [])
 
   const onEditorStateChange = (es: EditorState) => {
@@ -91,8 +99,7 @@ const addPost = () => {
   }
   const onClickUpload = async () => {
     if (title.trim() === "") return alert("제목을 입력해주세요")
-    if (editorState === EditorState.createEmpty())
-      return alert("내용을 입력해주세요")
+    if (editorState === EditorState.createEmpty()) return alert("내용을 입력해주세요")
     if (category === "") return alert("카테고리를 골라주세요")
     try {
       const text = convertToRaw(editorState.getCurrentContent())
@@ -116,7 +123,8 @@ const addPost = () => {
             labelId='demo-simple-select-helper-label'
             id='demo-simple-select-helper'
             value={category}
-            onChange={onCategoryChange}>
+            onChange={onCategoryChange}
+          >
             <MenuItem value=''>
               <em>None</em>
             </MenuItem>
@@ -127,7 +135,8 @@ const addPost = () => {
                       setCategory(obj.id)
                     }}
                     value={obj.id}
-                    key={obj.name}>
+                    key={obj.name}
+                  >
                     {obj.name}
                   </MenuItem>
                 ))
@@ -142,7 +151,8 @@ const addPost = () => {
               className={classes.titleInput}
               value={title}
               onChange={onTitleChange}
-              placeholder='제목을 입력하세요.'></Input>
+              placeholder='제목을 입력하세요.'
+            ></Input>
           </FlexDiv>
         </FlexDiv>
       </div>
