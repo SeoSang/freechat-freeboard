@@ -1,9 +1,7 @@
 export const BACKEND_URL = "http://localhost:6245"
 
 export const PostLink = (props) => (
-  <li>
-    <Link href='/p/[id]' as={`/p/${props.id}`}>
-      <a>{props.id}</a>
-    </Link>
-  </li>
+  <Link href='/post/[id]' as={`/post/${props.id}`}>
+    <a>{props.id}</a>
+  </Link>
 )
