@@ -17,6 +17,7 @@ import { useForm } from "react-hook-form"
 import Copyright from "../components/Copyright"
 import { PageLink } from "../components/PageLink"
 import { BACKEND_URL } from "../util/util"
+import { useRouter } from "next/dist/client/router"
 
 type FormValues = {
   name: string
@@ -65,6 +66,7 @@ export default function register() {
   const classes = useStyles()
   const { register, handleSubmit, watch, errors } = useForm<FormValues>()
   const [validateText, setValidateText] = useState<string>()
+  const router = useRouter()
 
   const onSubmit = async (data: FormValues) => {
     for (const [key, value] of Object.entries(data)) {
@@ -76,7 +78,8 @@ export default function register() {
     }
     try {
       const newUser = await axios.post(`${BACKEND_URL}/api/user/register`, data)
-      console.log(newUser)
+      alert("회원가입 성공!")
+      router.push("/")
     } catch (e) {
       console.error(e)
     }
@@ -157,7 +160,8 @@ export default function register() {
             fullWidth
             variant='contained'
             color='primary'
-            className={classes.submit}>
+            className={classes.submit}
+          >
             회원가입
           </Button>
           <Grid container justify='flex-end'>

@@ -33,7 +33,7 @@ class PostStore {
   }
 
   // 카테고리
-  getCategories = flow(function* () {
+  getCategories = flow(function*() {
     try {
       const result = yield axios.get(`${BACKEND_URL}/api/category`, {
         withCredentials: true,
@@ -46,7 +46,7 @@ class PostStore {
     }
   })
 
-  addCategory = flow(function* (category: string) {
+  addCategory = flow(function*(category: string) {
     try {
       const reqBody = { name: category }
       const result = yield axios.post(`${BACKEND_URL}/api/category`, reqBody, {
@@ -61,7 +61,7 @@ class PostStore {
   })
 
   // 포스트
-  getPosts = flow(function* () {
+  getPosts = flow(function*() {
     try {
       const result = yield axios.get(`${BACKEND_URL}/api/posts`, {
         withCredentials: true,
@@ -74,7 +74,7 @@ class PostStore {
     }
   })
 
-  getPost = flow(function* (postId: string) {
+  getPost = flow(function*(postId: string) {
     try {
       const result = yield axios.get(`${BACKEND_URL}/api/post/${postId}`, {
         withCredentials: true,
@@ -87,12 +87,13 @@ class PostStore {
     }
   })
 
-  addPost = flow(function* (categoryId: number, title: string, text: any) {
+  addPost = flow(function*(categoryId: number, title: string, text: any) {
     const data = {
       categoryId,
       title,
       text: JSON.stringify(text),
     }
+    yield console.log(data)
     const result = yield axios.post(`${BACKEND_URL}/api/post`, data, {
       withCredentials: true,
     })

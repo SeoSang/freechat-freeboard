@@ -54,7 +54,7 @@ export const getPost = asyncHandler(
 export const getPosts = asyncHandler(
   async (req: LoginedRequest, res: Response, next: NextFunction) => {
     const allPost = await posts.findAll({
-      attributes: ["id", "title"],
+      attributes: ["id", "title", "createdAt"],
     })
     res.status(200).json(allPost)
   },

@@ -15,9 +15,7 @@ const posts = () => {
   return (
     <div>
       {postStore.posts.map((p) => (
-        <PageLink
-          key={`${p.id}`}
-          href={{ pathname: `/post`, query: { id: p.id.toString() } }}>
+        <PageLink key={`${p.id}`} href={{ pathname: `/post`, query: { id: p.id?.toString() } }}>
           <div>
             <label>{p.id}</label>
             <h3>{p.title}</h3>
