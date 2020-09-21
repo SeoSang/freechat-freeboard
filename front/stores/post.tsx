@@ -14,6 +14,7 @@ export const initialPostState = {
   getPostsError: "",
   addPostError: "",
   addPostSuccess: false,
+  addCommentSuccess: false,
 }
 
 class PostStore {
@@ -26,6 +27,7 @@ class PostStore {
   @observable getPostsError = initialPostState.getPostsError
   @observable addPostError = initialPostState.addPostError
   @observable addPostSuccess = initialPostState.addPostSuccess
+  @observable addCommentSuccess = initialPostState.addCommentSuccess
   public root
 
   constructor(root: RootStore) {
@@ -93,12 +95,31 @@ class PostStore {
       title,
       text: JSON.stringify(text),
     }
+    yield console.log(data)
     const result = yield axios.post(`${BACKEND_URL}/api/post`, data, {
       withCredentials: true,
     })
     yield console.log("addPost result => ", result)
     this.posts.push(result.data)
     this.addPostSuccess = true
+  })
+
+  addComment = flow(function* (postId: number, text: string) {
+    try {
+      const data = {
+        postId,
+        text,
+      }
+      yield console.log(data)
+      const result = yield axios.post(`${BACKEND_URL}/api/comment`, data, {
+        withCredentials: true,
+      })
+      yield console.log("addComment result => ", result.data)
+      this.post.Comments.push(result.data)
+      this.addCommentSuccess = true
+    } catch (e) {
+      console.error(e)
+    }
   })
 
   @computed get info() {

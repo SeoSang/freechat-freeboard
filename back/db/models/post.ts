@@ -21,7 +21,7 @@ export interface PostAttributes {
 
 // Some attributes are optional in `User.build` and `User.create` calls
 interface PostCreationAttributes extends Optional<PostAttributes, "id"> {
-  UserId: number
+  WrittersId: number
   CategoryId: number
 }
 

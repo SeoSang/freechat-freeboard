@@ -1,14 +1,18 @@
-import { Sequelize, Model, DataTypes } from "sequelize"
+import { Sequelize, Model, DataTypes, Optional, Association } from "sequelize"
+import { User } from "./user"
 
 export interface CommentAttributes {
   id?: number
   text: string
 }
 
-// Some attributes are optional in `User.build` and `User.create` calls
+interface CommentCreationAttributes extends Optional<CommentAttributes, "id"> {
+  UserId: number
+  PostId: number
+}
 
 export class Comment
-  extends Model<CommentAttributes>
+  extends Model<CommentAttributes, CommentCreationAttributes>
   implements CommentAttributes {
   public id?: number
   public text!: string
@@ -16,10 +20,11 @@ export class Comment
   // timestamps!
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
+  public readonly User?: User
 
-  // public static associations: {
-  //   users: Association<Post, Comment>
-  // }
+  public static associations: {
+    users: Association<Comment, User>
+  }
 }
 
 export const commentInit = (sequelize: Sequelize) => {

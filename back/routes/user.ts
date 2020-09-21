@@ -1,9 +1,19 @@
-import { login, register, logout, loadMe } from "./../controllers/user"
+import {
+  login,
+  register,
+  logout,
+  loadMe,
+  getUser,
+  getUsers,
+} from "./../controllers/user"
 import express from "express"
 import isLoggedIn from "../middlewares/authToken"
+import isAdmin from "../middlewares/isadmin"
 const router = express.Router()
 
 router.route("/").get(isLoggedIn, loadMe)
+router.route("/:id").get(isLoggedIn, isAdmin, getUser)
+router.route("/all").get(isLoggedIn, isAdmin, getUsers)
 
 router.route("/login").post(login)
 

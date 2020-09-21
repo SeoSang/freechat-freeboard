@@ -120,6 +120,7 @@ const MainLayout: FC<{
 
   useEffect(() => {
     if (meStore.isLogouted) {
+      console.log("로그아웃! 쿠키 지워집니다")
       cookie.remove("token", { path: "/" })
       router.push("/")
       meStore.initialize()

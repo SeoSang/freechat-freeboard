@@ -8,6 +8,7 @@ import nunjucks from "nunjucks"
 import userRouter from "./routes/user"
 import postRouter from "./routes/post"
 import postsRouter from "./routes/posts"
+import commentRouter from "./routes/comment"
 import categoryRouter from "./routes/category"
 import session from "express-session"
 
@@ -28,7 +29,7 @@ app.use(
   cors({
     origin: process.env.CORS_ORIGIN,
     credentials: true,
-  }),
+  })
 )
 app.use(express.urlencoded({ extended: true })) // true면 qs 모듈
 app.use(express.json()) // 알아서 json 파일 파싱해줌
@@ -43,12 +44,13 @@ app.use(
       secure: "auto",
       httpOnly: true,
     },
-  }),
+  })
 )
 
 app.use("/api/user", userRouter)
 app.use("/api/post", postRouter)
 app.use("/api/posts", postsRouter)
+app.use("/api/comment", commentRouter)
 app.use("/api/category", categoryRouter)
 
 app.use((req, res, next) => {

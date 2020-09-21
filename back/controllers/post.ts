@@ -4,6 +4,7 @@ import db from "../db"
 import { LoginedRequest } from "../types"
 
 const posts = db.Post
+const users = db.User
 
 export const addPost = asyncHandler(
   async (req: LoginedRequest, res: Response, next: NextFunction) => {
@@ -13,11 +14,11 @@ export const addPost = asyncHandler(
     const newPost = await posts.create({
       title,
       text,
-      UserId: req.user.id,
+      WrittersId: req.user.id,
       CategoryId: categoryId,
     })
     res.status(200).json("포스팅 성공!")
-  },
+  }
 )
 
 export const getPost = asyncHandler(
@@ -29,15 +30,18 @@ export const getPost = asyncHandler(
       },
       include: [
         {
-          model: db.User as any,
+          model: users as any,
           attributes: ["id", "nickname"],
+          as: "Writters",
         },
         {
           model: db.Comment as any,
-          attributes: ["id", "text"],
+          attributes: ["id", "text", "createdAt", "updatedAt"],
           include: [
             {
-              model: db.User as any,
+              model: users as any,
+              attributes: ["id", "nickname"],
+              as: "Users",
             },
           ],
         },
@@ -48,16 +52,16 @@ export const getPost = asyncHandler(
       ],
     })
     res.status(200).json(post)
-  },
+  }
 )
 
 export const getPosts = asyncHandler(
   async (req: LoginedRequest, res: Response, next: NextFunction) => {
     const allPost = await posts.findAll({
-      attributes: ["id", "title"],
+      attributes: ["id", "title", "createdAt"],
     })
     res.status(200).json(allPost)
-  },
+  }
 )
 
 // export const getPostsByCategory = asyncHandler(
