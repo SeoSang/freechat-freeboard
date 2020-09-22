@@ -2,6 +2,8 @@ import { NextFunction, Request, Response } from "express"
 import asyncHandler from "../middlewares/async"
 import db from "../db"
 import { LoginedRequest } from "../types"
+import { Comment } from "../db/models/comment"
+import sequelize from "sequelize"
 
 const posts = db.Post
 const users = db.User
@@ -36,11 +38,10 @@ export const getPost = asyncHandler(
         },
         {
           model: db.Comment as any,
-          attributes: ["id", "text", "createdAt", "updatedAt"],
           include: [
             {
-              model: users as any,
-              attributes: ["id", "nickname"],
+              attributes: ["id", "nickname", "name"],
+              model: db.User as any,
               as: "Users",
             },
           ],
@@ -58,9 +59,27 @@ export const getPost = asyncHandler(
 export const getPosts = asyncHandler(
   async (req: LoginedRequest, res: Response, next: NextFunction) => {
     const allPost = await posts.findAll({
-      attributes: ["id", "title", "createdAt"],
+      attributes: [
+        "id",
+        "title",
+        "createdAt",
+        [
+          sequelize.literal(
+            "(SELECT COUNT(*) FROM Comments WHERE Comments.PostId = Post.id)"
+          ),
+          "commentCount",
+        ],
+      ],
+      include: [
+        {
+          model: db.Comment as any,
+        },
+      ],
     })
-    res.status(200).json(allPost)
+    allPost.forEach((post: any) => {
+      delete post.dataValues.Comments
+    })
+    return res.status(200).json(allPost)
   }
 )
 

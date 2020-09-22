@@ -4,6 +4,8 @@ import { User } from "./user"
 export interface CommentAttributes {
   id?: number
   text: string
+  UserId?: number
+  PostId?: number
 }
 
 interface CommentCreationAttributes extends Optional<CommentAttributes, "id"> {
@@ -20,7 +22,6 @@ export class Comment
   // timestamps!
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
-  public readonly User?: User
 
   public static associations: {
     users: Association<Comment, User>

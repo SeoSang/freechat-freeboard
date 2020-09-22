@@ -25,16 +25,30 @@ const Category = categoryInit(sequelize)
 // const LikePost = likePostInit(sequelize)
 
 User.hasMany(Domain)
-User.hasMany(Post, { as: "Writters", foreignKey: "WrittersId" })
-User.hasMany(Comment, { as: "Users", foreignKey: "UserId" })
+User.hasMany(Post)
+User.hasMany(Comment)
+User.belongsToMany(Post, {
+  as: "likePostUsers",
+  through: "likePost",
+})
+User.belongsToMany(Comment, {
+  as: "likeCommentUsers",
+  through: "likeComment",
+})
 Category.hasMany(Post)
 Post.hasMany(Comment)
 Post.belongsTo(User, { as: "Writters", foreignKey: "WrittersId" })
 Post.belongsTo(Category)
-Post.belongsToMany(User, { through: "likePost" })
+Post.belongsToMany(User, {
+  as: "likePosts",
+  through: "likePost",
+})
 Comment.belongsTo(Post)
 Comment.belongsTo(User, { as: "Users", foreignKey: "UserId" })
-Comment.belongsToMany(User, { through: "likeComment" })
+Comment.belongsToMany(User, {
+  as: "likeComments",
+  through: "likeComment",
+})
 Domain.belongsTo(User, { targetKey: "id" })
 // Post.hasMany(LikePost)
 // LikeComment.belongsTo(User, { targetKey: "id", foreignKey: "id" })

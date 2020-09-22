@@ -14,4 +14,7 @@ export interface PostData {
 export interface PostsPost {
   id: number
   title: string
+  commentCount: number
+  createdAt: Date
+  updatedAt?: Date
 }

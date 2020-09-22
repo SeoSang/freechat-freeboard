@@ -10,7 +10,7 @@ import {
   HasManyCreateAssociationMixin,
   Optional,
 } from "sequelize"
-import { Comment } from "./comment"
+import { Comment, CommentAttributes } from "./comment"
 import { UserAttributes } from "./user"
 
 export interface PostAttributes {
@@ -31,6 +31,9 @@ export class Post
   public id?: number
   public title!: string
   public text!: string
+
+  // association
+  public Comments?: CommentAttributes
 
   // timestamps!
   public readonly createdAt!: Date

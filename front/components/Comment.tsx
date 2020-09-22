@@ -10,6 +10,8 @@ import {
   Typography,
 } from "@material-ui/core"
 import Faker from "faker"
+import moment from "moment"
+import { CommentData } from "../types/comment"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const Comment = ({ comments }) => {
+const Comment = ({ comments }: { comments: CommentData[] }) => {
   const classes = useStyles()
   console.log(comments)
   return (
@@ -46,7 +48,7 @@ const Comment = ({ comments }) => {
                   <>
                     <Typography
                       component='span'
-                      variant='body2'
+                      variant='body1'
                       className={classes.inline}
                       color='textPrimary'>
                       {comment.Users.nickname}
@@ -55,6 +57,9 @@ const Comment = ({ comments }) => {
                   </>
                 }
               />
+              <Typography variant='body2'>
+                {moment(comment.createdAt).format("lll")}
+              </Typography>
             </ListItem>
             <Divider />
           </React.Fragment>
