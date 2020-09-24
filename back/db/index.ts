@@ -31,6 +31,7 @@ const Chat = chatInit(sequelize)
 User.hasMany(Domain)
 User.hasMany(Post)
 User.hasMany(Comment)
+User.hasMany(Room)
 User.belongsToMany(Post, {
   as: "likePostUsers",
   through: "likePost",
@@ -56,6 +57,7 @@ Comment.belongsToMany(User, {
 Domain.belongsTo(User, { targetKey: "id" })
 Chat.belongsTo(Room, { as: "Rooms", foreignKey: "RoomId" })
 Room.hasMany(Chat)
+Room.belongsTo(User, { as: "owner", foreignKey: "UserId" })
 // Post.hasMany(LikePost)
 // LikeComment.belongsTo(User, { targetKey: "id", foreignKey: "id" })
 // LikeComment.belongsTo(Comment, { targetKey: "id", foreignKey: "id" })

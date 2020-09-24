@@ -13,25 +13,36 @@ import { observer } from "mobx-react"
 import moment from "moment"
 import { PageLink } from "../components/PageLink"
 import { useRouter } from "next/dist/client/router"
-import { Button } from "@material-ui/core"
+import { Button, Modal } from "@material-ui/core"
 import { FlexDiv } from "../styles/div"
 import theme from "../styles/theme"
+import ChattingRoomForm from "../forms/ChattingRoomForm"
 
 interface Column {
-  id: "master" | "title" | "userCount" | "createdAt"
+  id: "owner" | "title" | "userCount" | "createdAt" | "max"
   label: string
   minWidth?: number
   align?: "right"
-  format?: (value: Date | string | number) => string
+  format?: (value: any) => string
 }
 
 const columns: Column[] = [
-  { id: "master", label: "방장", minWidth: 50 },
+  {
+    id: "owner",
+    label: "방장",
+    minWidth: 100,
+    format: (data: any) => data.nickname,
+  },
   { id: "title", label: "제목", minWidth: 200 },
   {
     id: "userCount",
-    label: "참여자 수",
-    minWidth: 50,
+    label: "참여자",
+    minWidth: 30,
+  },
+  {
+    id: "max",
+    label: "최대",
+    minWidth: 30,
   },
   {
     id: "createdAt",
@@ -60,6 +71,7 @@ function room() {
   const st = useStyles()
   const router = useRouter()
   const [page, setPage] = React.useState(0)
+  const [open, setOpen] = React.useState(false)
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
   const { chatStore } = useStore()
   const [rooms, setRooms] = useState<typeof chatStore.rooms | null>()
@@ -88,6 +100,14 @@ function room() {
 
   const onClickRow = (id: number) => () => {
     router.push({ pathname: `/room`, query: { id: id.toString() } })
+  }
+
+  const handleOpen = () => {
+    setOpen(true)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
   }
 
   return (
@@ -145,9 +165,16 @@ function room() {
         />
       </Paper>
       <div className={st.buttonContainer}>
-        <Button color='primary' variant='contained'>
+        <Button color='primary' variant='contained' onClick={handleOpen}>
           생성하기
         </Button>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby='simple-modal-title'
+          aria-describedby='simple-modal-description'>
+          <ChattingRoomForm></ChattingRoomForm>
+        </Modal>
       </div>
     </FlexDiv>
   )

@@ -2,13 +2,14 @@ import { observable, action, computed, flow } from "mobx"
 import { RootStore, useStore } from "."
 import axios from "axios"
 import { BACKEND_URL } from "../util/util"
+import { RoomData } from "../types/chat"
 
 export const initialChatState = {
-  rooms: [],
+  rooms: [] as RoomData[],
   chats: [],
   soketId: -1,
-  getRoomsError: "",
-  addRoomError: "",
+  getRoomsError: "" as any,
+  addRoomError: "" as any,
 }
 
 class ChatStore {
@@ -53,7 +54,7 @@ class ChatStore {
       })
       yield console.log("addRoom result => ", result)
     } catch (e) {
-      yield console.log(e)
+      yield console.log(e.response)
       this.addRoomError = e.response
     }
   })

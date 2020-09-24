@@ -7,7 +7,14 @@ import createHttpError from "http-errors"
 
 export const loadRooms = asyncHandler(
   async (req: LoginedRequest, res: Response, next: NextFunction) => {
-    const rooms = await db.Room.findAll()
+    const rooms: any = await db.Room.findAll({
+      include: [
+        {
+          model: db.User as any,
+          as: "owner",
+        },
+      ],
+    })
     res.status(200).json(rooms)
   }
 )
