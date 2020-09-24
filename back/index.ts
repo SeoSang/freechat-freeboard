@@ -10,10 +10,11 @@ import postRouter from "./routes/post"
 import postsRouter from "./routes/posts"
 import commentRouter from "./routes/comment"
 import categoryRouter from "./routes/category"
+import chatRouter from "./routes/chat"
 import session from "express-session"
+import webSocket from "./socket"
 
 dotenv.config()
-
 db.sequelize?.sync()
 const app = express()
 app.use(morgan("dev")) // 로그 찍어줌
@@ -52,6 +53,7 @@ app.use("/api/post", postRouter)
 app.use("/api/posts", postsRouter)
 app.use("/api/comment", commentRouter)
 app.use("/api/category", categoryRouter)
+app.use("/api/chat", chatRouter)
 
 app.use((req, res, next) => {
   res.status(404).send("404 not Found!")
@@ -64,8 +66,9 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   res.render("error")
 })
 
-app.listen(app.get("port"), () => {
+const server = app.listen(app.get("port"), () => {
   console.log(`실행됨 : http://localhost:${app.get("port")}`)
 })
 
+webSocket(server, app)
 export default app

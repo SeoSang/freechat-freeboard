@@ -6,6 +6,8 @@ import { commentInit } from "./models/comment"
 import { likeCommentInit } from "./models/likeComment"
 import { likePostInit } from "./models/likePost"
 import { categoryInit } from "./models/category"
+import { roomInit } from "./models/room"
+import { chatInit } from "./models/chat"
 const env = process.env.NODE_ENV || "development"
 const config = require("../config/config.js")[env]
 
@@ -21,6 +23,8 @@ const Domain = domainInit(sequelize)
 const Post = postInit(sequelize)
 const Comment = commentInit(sequelize)
 const Category = categoryInit(sequelize)
+const Room = roomInit(sequelize)
+const Chat = chatInit(sequelize)
 // const LikeComment = likeCommentInit(sequelize)
 // const LikePost = likePostInit(sequelize)
 
@@ -50,6 +54,8 @@ Comment.belongsToMany(User, {
   through: "likeComment",
 })
 Domain.belongsTo(User, { targetKey: "id" })
+Chat.belongsTo(Room, { as: "Rooms", foreignKey: "RoomId" })
+Room.hasMany(Chat)
 // Post.hasMany(LikePost)
 // LikeComment.belongsTo(User, { targetKey: "id", foreignKey: "id" })
 // LikeComment.belongsTo(Comment, { targetKey: "id", foreignKey: "id" })
@@ -62,6 +68,8 @@ const db = {
   Comment,
   Post,
   Category,
+  Chat,
+  Room,
   sequelize,
 }
 

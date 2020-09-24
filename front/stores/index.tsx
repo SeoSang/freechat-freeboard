@@ -5,6 +5,7 @@ import { useLocalStore, useStaticRendering } from "mobx-react"
 import MeStore, { initialMeState } from "./me"
 import PostStore from "./post"
 import { MainUserData } from "../types/user"
+import ChatStore from "./chat"
 
 const isServer = typeof window === "undefined"
 let store: RootStore | null = null
@@ -18,13 +19,16 @@ export class RootStore {
   constructor(meData: MainUserData | null = null) {
     this.meStore = new MeStore(this, meData)
     this.postStore = new PostStore(this)
+    this.chatStore = new ChatStore(this)
   }
   @observable meStore: MeStore
   @observable postStore: PostStore
+  @observable chatStore: ChatStore
 
   @action init() {
     this.meStore = new MeStore(this, null)
     this.postStore = new PostStore(this)
+    this.chatStore = new ChatStore(this)
   }
 }
 

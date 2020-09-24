@@ -1,10 +1,21 @@
 import clsx from "clsx"
-import React, { FC, ReactComponentElement, ReactElement, useCallback, useEffect } from "react"
+import React, {
+  FC,
+  ReactComponentElement,
+  ReactElement,
+  useCallback,
+  useEffect,
+} from "react"
 import st from "./MainLayout.module.css"
 import Copyright from "../components/Copyright"
 import styled from "styled-components"
 import { RootStore, useStore } from "../stores"
-import { makeStyles, useTheme, Theme, createStyles } from "@material-ui/core/styles"
+import {
+  makeStyles,
+  useTheme,
+  Theme,
+  createStyles,
+} from "@material-ui/core/styles"
 import Drawer from "@material-ui/core/Drawer"
 import CssBaseline from "@material-ui/core/CssBaseline"
 import AppBar from "@material-ui/core/AppBar"
@@ -106,7 +117,7 @@ const useStyles = makeStyles((theme: Theme) =>
       display: "flex",
       marginLeft: "auto",
     },
-  }),
+  })
 )
 
 const MainLayout: FC<{
@@ -146,16 +157,14 @@ const MainLayout: FC<{
         position='fixed'
         className={clsx(classes.appBar, {
           [classes.appBarShift]: open,
-        })}
-      >
+        })}>
         <Toolbar>
           <IconButton
             color='inherit'
             aria-label='open drawer'
             onClick={handleDrawerOpen}
             edge='start'
-            className={clsx(classes.menuButton, open && classes.hide)}
-          >
+            className={clsx(classes.menuButton, open && classes.hide)}>
             <MenuIcon />
           </IconButton>
           <Typography variant='h6' noWrap>
@@ -164,19 +173,23 @@ const MainLayout: FC<{
           <div className={classes.menuRightDiv}>
             <PageLink href='/login'>
               <Typography
-                className={clsx(classes.menuRightContent, isLoggedIn() && classes.hide)}
+                className={clsx(
+                  classes.menuRightContent,
+                  isLoggedIn() && classes.hide
+                )}
                 variant='h6'
-                noWrap
-              >
+                noWrap>
                 로그인
               </Typography>
             </PageLink>
             <PageLink href='/register'>
               <Typography
-                className={clsx(classes.menuRightContent, isLoggedIn() && classes.hide)}
+                className={clsx(
+                  classes.menuRightContent,
+                  isLoggedIn() && classes.hide
+                )}
                 variant='h6'
-                noWrap
-              >
+                noWrap>
                 회원가입
               </Typography>
             </PageLink>
@@ -191,11 +204,14 @@ const MainLayout: FC<{
         open={open}
         classes={{
           paper: classes.drawerPaper,
-        }}
-      >
+        }}>
         <div className={classes.drawerHeader}>
           <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "ltr" ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+            {theme.direction === "ltr" ? (
+              <ChevronLeftIcon />
+            ) : (
+              <ChevronRightIcon />
+            )}
           </IconButton>
         </div>
         <Divider />
@@ -216,7 +232,7 @@ const MainLayout: FC<{
               <ListItemText primary={"게시판_테스트용"} />
             </ListItem>
           </PageLink>
-          <PageLink href='chat'>
+          <PageLink href='rooms'>
             <ListItem button>
               <ListItemIcon>
                 <ChatIcon />
@@ -255,8 +271,7 @@ const MainLayout: FC<{
       <main
         className={clsx(classes.content, {
           [classes.contentShift]: open,
-        })}
-      >
+        })}>
         <div className={classes.drawerHeader} />
         {children}
         <Footer>

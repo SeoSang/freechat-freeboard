@@ -1,8 +1,15 @@
-import { makeStyles, Typography } from "@material-ui/core"
+import {
+  Button,
+  IconButton,
+  makeStyles,
+  TextField,
+  Typography,
+} from "@material-ui/core"
 import React, { useEffect, useState } from "react"
 import ChatMessage from "../components/ChatMessage"
 import { FlexDiv } from "../styles/div"
 import moment from "moment"
+import { PhotoCamera } from "@material-ui/icons"
 
 const useStyles = makeStyles((theme) => ({
   mainContainer: {
@@ -15,6 +22,12 @@ const useStyles = makeStyles((theme) => ({
   title: {
     fontWeight: 600,
     marginBottom: theme.spacing(1),
+  },
+  chatContainer: {
+    margin: theme.spacing(0, 1),
+  },
+  input: {
+    display: "none",
   },
 }))
 
@@ -41,7 +54,32 @@ const chat = () => {
       <ChatMessage me={false} txt={"하이여😀"} />
       <ChatMessage me={true} txt={"테스트중"} />
       <ChatMessage me={true} txt={"테스트중"} />
-      채팅 서비스 제공 예정
+      <FlexDiv>
+        <input
+          accept='image/*'
+          className={st.input}
+          id='contained-button-file'
+          multiple
+          type='file'
+        />
+        <label htmlFor='contained-button-file'>
+          <IconButton
+            color='primary'
+            aria-label='upload picture'
+            component='span'>
+            <PhotoCamera />
+          </IconButton>
+        </label>
+        <TextField
+          className={st.chatContainer}
+          variant='outlined'
+          label='채팅을 입력하세요'
+          multiline={true}
+        />
+        <Button color='primary' variant='contained'>
+          전송
+        </Button>
+      </FlexDiv>
     </FlexDiv>
   )
 }

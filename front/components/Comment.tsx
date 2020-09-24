@@ -41,7 +41,7 @@ const Comment = ({ comments }: { comments: CommentData[] }) => {
               <ListItemText
                 primary={
                   <Typography className={classes.fonts}>
-                    {comment.Users.name}
+                    {comment.Users?.name}
                   </Typography>
                 }
                 secondary={
@@ -51,7 +51,7 @@ const Comment = ({ comments }: { comments: CommentData[] }) => {
                       variant='body1'
                       className={classes.inline}
                       color='textPrimary'>
-                      {comment.Users.nickname}
+                      {comment.Users?.nickname}
                     </Typography>
                     {` - ${comment.text}`}
                   </>
