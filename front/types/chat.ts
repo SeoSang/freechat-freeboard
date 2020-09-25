@@ -7,3 +7,8 @@ export interface RoomData {
   owner?: "string"
   createdAt?: Date
 }
+
+export interface ChatData {
+  user: string
+  chat: string
+}

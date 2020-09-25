@@ -17,6 +17,10 @@ import { Button, Modal } from "@material-ui/core"
 import { FlexDiv } from "../styles/div"
 import theme from "../styles/theme"
 import ChattingRoomForm from "../forms/ChattingRoomForm"
+import EnterRoomForm from "../forms/EnterRoomForm"
+import { BACKEND_URL } from "../util/util"
+import { RoomData } from "../types/chat"
+import io from "socket.io-client"
 
 interface Column {
   id: "owner" | "title" | "userCount" | "createdAt" | "max"
@@ -72,13 +76,30 @@ function room() {
   const router = useRouter()
   const [page, setPage] = React.useState(0)
   const [open, setOpen] = React.useState(false)
+  const [createOpen, setCreateOpen] = React.useState(false)
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
   const { chatStore } = useStore()
   const [rooms, setRooms] = useState<typeof chatStore.rooms | null>()
 
   useEffect(() => {
+    const socket = io.connect(`${BACKEND_URL}/room`, {
+      // 네임스페이스
+      path: "/socket.io",
+    })
+    socket.on("newRoom", function (data: RoomData) {
+      // 새 방 이벤트 시 새 방 생성
+      chatStore.addRoomBySocket(data)
+    })
+
+    socket.on("removeRoom", function (data: RoomData) {
+      // 방 제거 이벤트 시 id가 일치하는 방 제거
+      chatStore.removeRoomBySocket(data)
+    })
+  }, [BACKEND_URL])
+
+  useEffect(() => {
     const getRooms = async () => {
-      await chatStore.getRooms()
+      await chatStore.loadRooms()
       setRooms(chatStore.rooms)
     }
     const timer = setTimeout(getRooms, 200)
@@ -96,10 +117,6 @@ function room() {
   ) => {
     setRowsPerPage(+event.target.value)
     setPage(0)
-  }
-
-  const onClickRow = (id: number) => () => {
-    router.push({ pathname: `/room`, query: { id: id.toString() } })
   }
 
   const handleOpen = () => {
@@ -137,7 +154,7 @@ function room() {
                       role='checkbox'
                       tabIndex={-1}
                       key={row.id}
-                      onClick={onClickRow(row.id)}>
+                      onClick={() => setCreateOpen(true)}>
                       {columns.map((column) => {
                         const value = column.format
                           ? column.format(row[column.id])
@@ -148,6 +165,15 @@ function room() {
                           </TableCell>
                         )
                       })}
+                      <Modal
+                        open={createOpen}
+                        onClose={() => setCreateOpen(false)}>
+                        <EnterRoomForm
+                          roomId={row.id}
+                          max={row.max}
+                          title={row.title}
+                        />
+                      </Modal>
                     </TableRow>
                   )
                 })}
@@ -173,7 +199,7 @@ function room() {
           onClose={handleClose}
           aria-labelledby='simple-modal-title'
           aria-describedby='simple-modal-description'>
-          <ChattingRoomForm></ChattingRoomForm>
+          <ChattingRoomForm setOpen={setOpen}></ChattingRoomForm>
         </Modal>
       </div>
     </FlexDiv>

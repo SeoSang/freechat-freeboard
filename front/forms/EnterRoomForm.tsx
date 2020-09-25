@@ -60,32 +60,31 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-const ChattingRoomForm = ({ setOpen }: { setOpen: (val: boolean) => void }) => {
+const ChattingRoomForm = ({
+  roomId,
+  max,
+  title,
+}: {
+  roomId: number
+  max: number
+  title: string
+}) => {
   const [modalStyle] = React.useState(getModalStyle)
-
-  const [max, setMax] = React.useState(2)
-  const [title, setTitle] = React.useState("")
   const [password, setPassword] = React.useState("")
   const router = useRouter()
   const { chatStore } = useStore()
   const st = useStyles()
 
-  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setMax(event.target.value as number)
-  }
-
-  useEffect(() => {
-    if (chatStore.addRoomError !== "") {
-      alert(chatStore.addRoomError.statusText)
-    }
-  }, [chatStore.addRoomError])
-
   const onSubmit = async () => {
-    if (title === "") return alert("방 제목을 입력해주세요")
-    const result = await chatStore.addRoom(title, max, password)
-    if (result) {
-      alert("방 생성이 완료되었습니다!")
-      setOpen(false)
+    const result = await chatStore.isPasswordCorrect(password, roomId)
+    if (result === "성공") {
+      alert("방에 입장합니다!")
+      router.push({
+        pathname: `/room`,
+        query: { id: roomId.toString(), password },
+      })
+    } else {
+      alert(result)
     }
   }
 
@@ -93,38 +92,15 @@ const ChattingRoomForm = ({ setOpen }: { setOpen: (val: boolean) => void }) => {
     <div style={modalStyle} className={st.paper}>
       <FlexDiv direction='column'>
         <Typography className={st.title} variant='h4'>
-          방 생성
+          비밀번호 입력하세요
         </Typography>
         <FlexDiv width='100%' justify='space-around'>
-          <Typography className={st.label}>인원 수</Typography>
-          <FormControl variant='outlined' className={st.formControl}>
-            <InputLabel id='demo-simple-select-outlined-label'>
-              인원수
-            </InputLabel>
-            <Select
-              labelId='demo-simple-select-outlined-label'
-              id='demo-simple-select-outlined'
-              value={max}
-              onChange={handleChange}
-              label='인원수'>
-              <MenuItem value=''>
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={2}>2</MenuItem>
-              <MenuItem value={3}>3</MenuItem>
-              <MenuItem value={4}>4</MenuItem>
-              <MenuItem value={5}>5</MenuItem>
-            </Select>
-          </FormControl>
+          <Typography className={st.label}>방제목</Typography>
+          <TextField value={title} className={st.input}></TextField>
         </FlexDiv>
         <FlexDiv width='100%' justify='space-around'>
-          <Typography className={st.label}>방제목</Typography>
-          <TextField
-            value={title}
-            onChange={(e) => {
-              setTitle(e.target.value)
-            }}
-            className={st.input}></TextField>
+          <Typography className={st.label}>최대인원</Typography>
+          <TextField value={max} className={st.input}></TextField>
         </FlexDiv>
         <FlexDiv width='100%' justify='space-around'>
           <Typography className={st.label}>비밀번호</Typography>
@@ -137,7 +113,7 @@ const ChattingRoomForm = ({ setOpen }: { setOpen: (val: boolean) => void }) => {
             className={st.input}></TextField>
         </FlexDiv>
         <Button className={st.button} variant='contained' onClick={onSubmit}>
-          생성하기
+          입장하기
         </Button>
       </FlexDiv>
     </div>
