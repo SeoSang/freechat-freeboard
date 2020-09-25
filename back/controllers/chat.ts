@@ -5,6 +5,43 @@ import { LoginedRequest } from "../types"
 import sequelize from "sequelize"
 import createHttpError from "http-errors"
 
+export const loadRoom = asyncHandler(
+  async (req: LoginedRequest, res: Response, next: NextFunction) => {
+    const exRoom = await db.Room.findOne({
+      where: {
+        id: parseInt(req.query.id as string),
+      },
+    })
+    if (!exRoom) {
+      return next(createHttpError(410, "존재하지 않는 방입니다!"))
+    }
+    if (exRoom.password && exRoom.password !== req.query.password) {
+      return next(createHttpError(409, "비밀번호가 틀렸습니다!"))
+    }
+    const io = req.app.get("io")
+    const { rooms } = io.of("/chat").adapter
+    if (
+      rooms &&
+      rooms[req.params.id] &&
+      exRoom.max <= rooms[req.params.id].length
+    ) {
+      return next(createHttpError(413, "허용인원 초과!"))
+    }
+    const chats = await db.Chat.findAll({
+      where: {
+        RoomId: exRoom.id,
+      },
+      order: [["createdAt", "ASC"]],
+    })
+
+    return res.status(200).json({
+      room: exRoom,
+      chats,
+      user: req.user.nickname,
+    })
+  }
+)
+
 export const loadRooms = asyncHandler(
   async (req: LoginedRequest, res: Response, next: NextFunction) => {
     const rooms: any = await db.Room.findAll({
@@ -28,45 +65,15 @@ export const addRoom = asyncHandler(
       UserId: req.user.id,
     })
     const io = req.app.get("io")
-    io.of("/room").emit("newRoom", newRoom)
+    const result = {
+      ...newRoom.get(),
+      owner: {
+        id: req.user.id,
+        nickname: req.user.nickname,
+      },
+    }
+    io.of("/room").emit("newRoom", result)
     res.status(200).json(newRoom)
-  }
-)
-
-export const getRoom = asyncHandler(
-  async (req: LoginedRequest, res: Response, next: NextFunction) => {
-    const exRoom = await db.Room.findOne({
-      where: {
-        id: parseInt(req.params.id),
-      },
-    })
-    if (!exRoom) {
-      return next(createHttpError(410, "존재하지 않는 방입니다!"))
-    }
-    if (exRoom.password && exRoom.password !== req.query.password) {
-      return next(createHttpError(409, "비밀번호가 틀렸습니다!"))
-    }
-    const io = req.app.get("io")
-    const { rooms } = io.of("/chat").adapter
-    if (
-      rooms &&
-      rooms[req.params.id] &&
-      exRoom.max <= rooms[req.params.id].length
-    ) {
-      return next(createHttpError(413, "허용인원 초과!"))
-    }
-    const chats = await db.Chat.findAll({
-      where: {
-        RoomId: exRoom.id,
-      },
-    })
-
-    return res.status(200).json({
-      room: exRoom,
-      title: exRoom.title,
-      chats,
-      user: req.user.nickname,
-    })
   }
 )
 
@@ -81,9 +88,42 @@ export const deleteRoom = asyncHandler(
   }
 )
 
-export const getRooms = asyncHandler(
+export const deleteRooms = asyncHandler(
   async (req: LoginedRequest, res: Response, next: NextFunction) => {
-    const rooms = await db.Room.findAll()
-    res.status(200).json(rooms)
+    await db.Room.destroy({
+      where: {},
+      // truncate: true,
+    })
+    res.status(200).json("전체 삭제 완료")
+  }
+)
+
+export const sendChat = asyncHandler(
+  async (req: LoginedRequest, res: Response, next: NextFunction) => {
+    const chat = await db.Chat.create({
+      RoomId: parseInt(req.params.id),
+      UserId: req.user.id,
+      chat: req.body.chat,
+    })
+    req.app.get("io").of("/chat").to(req.params.id).emit("chat", chat)
+
+    res.status(200).json("채팅보내기 완료")
+  }
+)
+
+export const isPasswordCorrect = asyncHandler(
+  async (req: LoginedRequest, res: Response, next: NextFunction) => {
+    const exRoom = await db.Room.findOne({
+      where: {
+        id: req.body.roomId,
+      },
+    })
+    if (!exRoom) {
+      return next(createHttpError(410, "없는 방입니다!"))
+    }
+    if (exRoom.password !== req.body.password) {
+      return next(createHttpError(403, "비밀번호가 틀립니다!"))
+    }
+    res.status(200).json(true)
   }
 )

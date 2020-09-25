@@ -1,6 +1,6 @@
 import express from "express"
 import { addPost, getPost } from "../controllers/post"
-import isLoggedIn from "../middlewares/authToken"
+import isLoggedIn from "../middlewares/isLoggedIn"
 
 const router = express.Router()
 

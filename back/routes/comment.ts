@@ -1,5 +1,5 @@
 import express from "express"
-import isLoggedIn from "../middlewares/authToken"
+import isLoggedIn from "../middlewares/isLoggedIn"
 import { addComment, getComment, getComments } from "../controllers/comment"
 import isAdmin from "../middlewares/isadmin"
 

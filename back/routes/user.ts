@@ -7,7 +7,7 @@ import {
   getUsers,
 } from "./../controllers/user"
 import express from "express"
-import isLoggedIn from "../middlewares/authToken"
+import isLoggedIn from "../middlewares/isLoggedIn"
 import isAdmin from "../middlewares/isadmin"
 const router = express.Router()
 

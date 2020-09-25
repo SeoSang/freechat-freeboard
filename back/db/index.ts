@@ -32,6 +32,7 @@ User.hasMany(Domain)
 User.hasMany(Post)
 User.hasMany(Comment)
 User.hasMany(Room)
+User.hasMany(Chat)
 User.belongsToMany(Post, {
   as: "likePostUsers",
   through: "likePost",
@@ -56,6 +57,7 @@ Comment.belongsToMany(User, {
 })
 Domain.belongsTo(User, { targetKey: "id" })
 Chat.belongsTo(Room, { as: "Rooms", foreignKey: "RoomId" })
+Chat.belongsTo(User, { as: "Users", foreignKey: "UserId" })
 Room.hasMany(Chat)
 Room.belongsTo(User, { as: "owner", foreignKey: "UserId" })
 // Post.hasMany(LikePost)

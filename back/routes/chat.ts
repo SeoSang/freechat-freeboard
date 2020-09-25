@@ -2,11 +2,13 @@ import express from "express"
 import {
   addRoom,
   deleteRoom,
-  getRoom,
-  getRooms,
+  deleteRooms,
+  isPasswordCorrect,
+  loadRoom,
   loadRooms,
+  sendChat,
 } from "../controllers/chat"
-import isLoggedIn from "../middlewares/authToken"
+import isLoggedIn from "../middlewares/isLoggedIn"
 import isAdmin from "../middlewares/isadmin"
 import multer from "multer"
 import fs from "fs"
@@ -34,12 +36,20 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 },
 })
 
-router.route("/room").get(loadRooms).post(isLoggedIn, addRoom)
+// 채팅방 관련
+router
+  .route("/room/all")
+  .get(loadRooms)
+  .delete(isLoggedIn, isAdmin, deleteRooms)
 router
   .route("/room/:id")
-  .get(isLoggedIn, getRoom)
+  .get(isLoggedIn, loadRoom)
   .delete(isLoggedIn, deleteRoom)
 
-router.route("/all").get(isLoggedIn, getRooms)
+router.route("/room").get(isLoggedIn, loadRoom).post(isLoggedIn, addRoom)
+router.route("/room/check").post(isPasswordCorrect)
+
+// 채팅관련
+router.route("/:id").post(isLoggedIn, sendChat)
 
 export default router

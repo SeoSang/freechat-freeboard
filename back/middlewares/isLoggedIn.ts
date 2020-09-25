@@ -6,9 +6,9 @@ import asyncHandler from "./async"
 const isLoggedIn: RequestHandler = asyncHandler(
   (req: Request, res: Response, next: NextFunction) => {
     // Gather the jwt access token from the request header
-    const token = req.cookies.token
-    console.log("token => ", token)
+    const token = req.cookies ? req.cookies.token : ""
     if (!token) {
+      console.log(req)
       return next(createError(401, "Not authorized to access this route"))
     }
 

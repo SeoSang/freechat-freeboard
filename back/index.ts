@@ -36,17 +36,16 @@ app.use(express.urlencoded({ extended: true })) // true면 qs 모듈
 app.use(express.json()) // 알아서 json 파일 파싱해줌
 app.use(cookieParser())
 const ss: string = process.env.SESSION_SECRET ? process.env.SESSION_SECRET : ""
-app.use(
-  session({
-    resave: false,
-    saveUninitialized: false,
-    secret: ss,
-    cookie: {
-      secure: "auto",
-      httpOnly: true,
-    },
-  })
-)
+export const sessionMiddleWare = session({
+  resave: false,
+  saveUninitialized: false,
+  secret: ss,
+  cookie: {
+    secure: "auto",
+    httpOnly: true,
+  },
+})
+app.use(sessionMiddleWare)
 
 app.use("/api/user", userRouter)
 app.use("/api/post", postRouter)
@@ -70,5 +69,5 @@ const server = app.listen(app.get("port"), () => {
   console.log(`실행됨 : http://localhost:${app.get("port")}`)
 })
 
-webSocket(server, app)
+webSocket(server, app, sessionMiddleWare)
 export default app

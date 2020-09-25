@@ -3,7 +3,6 @@ import { User } from "./user"
 
 export interface ChatAttributes {
   id?: number
-  user: string
   chat?: string
   gif?: string
   RoomId?: number
@@ -19,7 +18,6 @@ export class Chat
   implements ChatAttributes {
   public id?: number
   public room!: string
-  public user!: string
   public chat?: string
   public gif?: string
   public RoomId?: number
@@ -41,10 +39,6 @@ export const chatInit = (sequelize: Sequelize) => {
         type: DataTypes.INTEGER.UNSIGNED,
         autoIncrement: true,
         primaryKey: true,
-      },
-      user: {
-        type: new DataTypes.STRING(1027),
-        allowNull: false,
       },
       chat: {
         type: new DataTypes.STRING(2047),
