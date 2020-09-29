@@ -3,6 +3,7 @@ import { RootStore, useStore } from "."
 import axios from "axios"
 import { BACKEND_URL } from "../util/util"
 import { PostsPost, PostData } from "../types/post"
+import { getErrorText } from "../util/getErrorText"
 
 export const initialPostState = {
   categories: [],
@@ -35,7 +36,7 @@ class PostStore {
   }
 
   // 카테고리
-  getCategories = flow(function* () {
+  getCategories = flow(function*() {
     try {
       const result = yield axios.get(`${BACKEND_URL}/api/category`, {
         withCredentials: true,
@@ -48,7 +49,7 @@ class PostStore {
     }
   })
 
-  addCategory = flow(function* (category: string) {
+  addCategory = flow(function*(category: string) {
     try {
       const reqBody = { name: category }
       const result = yield axios.post(`${BACKEND_URL}/api/category`, reqBody, {
@@ -63,7 +64,7 @@ class PostStore {
   })
 
   // 포스트
-  getPosts = flow(function* () {
+  getPosts = flow(function*() {
     try {
       const result = yield axios.get(`${BACKEND_URL}/api/posts`, {
         withCredentials: true,
@@ -76,20 +77,22 @@ class PostStore {
     }
   })
 
-  getPost = flow(function* (postId: string) {
+  getPost = flow(function*(postId: string) {
     try {
       const result = yield axios.get(`${BACKEND_URL}/api/post/${postId}`, {
         withCredentials: true,
       })
       yield console.log("getPost result => ", result)
       this.post = result.data
+      return { status: 200, text: "포스트 로드 성공!" }
     } catch (e) {
       yield console.log(e)
       this.getPostError = e
+      return { status: e.response.status, text: getErrorText(e.response.status) }
     }
   })
 
-  addPost = flow(function* (categoryId: number, title: string, text: any) {
+  addPost = flow(function*(categoryId: number, title: string, text: any) {
     const data = {
       categoryId,
       title,
@@ -104,7 +107,7 @@ class PostStore {
     this.addPostSuccess = true
   })
 
-  addComment = flow(function* (postId: number, text: string) {
+  addComment = flow(function*(postId: number, text: string) {
     try {
       const data = {
         postId,
@@ -117,8 +120,10 @@ class PostStore {
       yield console.log("addComment result => ", result.data)
       this.post.Comments.push(result.data)
       this.addCommentSuccess = true
+      return "댓글이 성공적으로 달렸습니다!"
     } catch (e) {
       console.error(e)
+      return getErrorText(e.response.status)
     }
   })
 

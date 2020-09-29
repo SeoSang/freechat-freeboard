@@ -13,17 +13,17 @@ const CommentForm = ({ postId }: { postId: number }) => {
 
   const handleCommentText = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCommentText(e.target.value)
-    commentText.length < 2
-      ? setHelperText("댓글이 너무 짧습니다")
-      : setHelperText("")
+    commentText.length < 2 ? setHelperText("댓글이 너무 짧습니다") : setHelperText("")
   }
 
   const onClickCancle = () => {
     setVisible(false)
   }
 
-  const onClickSubmit = () => {
-    postStore.addComment(postId, commentText)
+  const onClickSubmit = async () => {
+    const result = await postStore.addComment(postId, commentText)
+    alert(result)
+    window.location.reload()
   }
 
   return (
@@ -52,7 +52,8 @@ const CommentForm = ({ postId }: { postId: number }) => {
             style={{ marginRight: "0.5em" }}
             variant='contained'
             color='secondary'
-            onClick={onClickCancle}>
+            onClick={onClickCancle}
+          >
             취소
           </Button>
           <Button variant='contained' color='primary' onClick={onClickSubmit}>

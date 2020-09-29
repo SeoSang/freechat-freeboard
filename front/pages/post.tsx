@@ -15,16 +15,20 @@ const post = () => {
   const [error, setError] = useState(false)
 
   useEffect(() => {
-    if (id) postStore.getPost(id)
-    console.log(postStore.post.text)
+    const getPost = async (ID: string) => {
+      const result = await postStore.getPost(ID)
+      if (result.status != 200) {
+        alert(result.text)
+        router.push("/")
+      }
+    }
+    getPost(id)
   }, [id])
 
   const text = useMemo(() => {
     try {
-      const editorState = postStore.post.text
-        ? EditorState.createWithContent(
-            convertFromRaw(JSON.parse(postStore.post.text))
-          )
+      const editorState = postStore.post?.text
+        ? EditorState.createWithContent(convertFromRaw(JSON.parse(postStore.post.text)))
         : EditorState.createEmpty()
       return editorState
     } catch (e) {
@@ -37,20 +41,15 @@ const post = () => {
   return (
     <FlexDiv direction='column'>
       <FlexDiv width='100%' justify='flex-start'>
-        <Typography variant='h6'>
-          {postStore.post.User?.nickname} 님의 글
-        </Typography>
+        <Typography variant='h6'>{postStore.post?.User?.nickname} 님의 글</Typography>
       </FlexDiv>
-      <Typography variant='h5'>{postStore.post.title}</Typography>
+      <Typography variant='h5'>{postStore.post?.title}</Typography>
       <Editor onChange={() => {}} editorState={text as any} readOnly={true} />
       <Divider style={{ alignSelf: "stretch" }} variant='middle' />
       <FlexDiv width='100%' justify='flex-start'>
         <Typography variant='h6'>댓글</Typography>
       </FlexDiv>
-      <Comment
-        comments={
-          postStore.post.Comments ? postStore.post.Comments : []
-        }></Comment>
+      <Comment comments={postStore.post?.Comments ? postStore.post.Comments : []}></Comment>
       {/* <FlexDiv width='100%' direction='column'>
         {postStore.post.Comments
           ? postStore.post.Comments.map((comment) => <div>comment 테스트</div>)
