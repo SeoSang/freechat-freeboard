@@ -86,12 +86,12 @@ function room() {
       // 네임스페이스
       path: "/socket.io",
     })
-    socket.on("newRoom", function (data: RoomData) {
+    socket.on("newRoom", function(data: RoomData) {
       // 새 방 이벤트 시 새 방 생성
       chatStore.addRoomBySocket(data)
     })
 
-    socket.on("removeRoom", function (data: RoomData) {
+    socket.on("removeRoom", function(data: RoomData) {
       // 방 제거 이벤트 시 id가 일치하는 방 제거
       chatStore.removeRoomBySocket(data)
     })
@@ -112,9 +112,7 @@ function room() {
     setPage(newPage)
   }
 
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRowsPerPage(+event.target.value)
     setPage(0)
   }
@@ -125,6 +123,10 @@ function room() {
 
   const handleClose = () => {
     setOpen(false)
+  }
+
+  const triggerSetOpen = (b: boolean) => {
+    setOpen(b)
   }
 
   return (
@@ -138,45 +140,37 @@ function room() {
                   <TableCell
                     key={column.id}
                     align={column.align}
-                    style={{ minWidth: column.minWidth }}>
+                    style={{ minWidth: column.minWidth }}
+                  >
                     {column.label}
                   </TableCell>
                 ))}
               </TableRow>
             </TableHead>
             <TableBody>
-              {rooms
-                ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => {
-                  return (
-                    <TableRow
-                      hover
-                      role='checkbox'
-                      tabIndex={-1}
-                      key={row.id}
-                      onClick={() => setCreateOpen(true)}>
-                      {columns.map((column) => {
-                        const value = column.format
-                          ? column.format(row[column.id])
-                          : row[column.id]
-                        return (
-                          <TableCell key={column.id} align={column.align}>
-                            {value}
-                          </TableCell>
-                        )
-                      })}
-                      <Modal
-                        open={createOpen}
-                        onClose={() => setCreateOpen(false)}>
-                        <EnterRoomForm
-                          roomId={row.id}
-                          max={row.max}
-                          title={row.title}
-                        />
-                      </Modal>
-                    </TableRow>
-                  )
-                })}
+              {rooms?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                return (
+                  <TableRow
+                    hover
+                    role='checkbox'
+                    tabIndex={-1}
+                    key={row.id}
+                    onClick={() => setCreateOpen(true)}
+                  >
+                    {columns.map((column) => {
+                      const value = column.format ? column.format(row[column.id]) : row[column.id]
+                      return (
+                        <TableCell key={column.id} align={column.align}>
+                          {value}
+                        </TableCell>
+                      )
+                    })}
+                    <Modal open={createOpen} onClose={() => setCreateOpen(false)}>
+                      <EnterRoomForm roomId={row.id} max={row.max} title={row.title} />
+                    </Modal>
+                  </TableRow>
+                )
+              })}
             </TableBody>
           </Table>
         </TableContainer>
@@ -194,12 +188,8 @@ function room() {
         <Button color='primary' variant='contained' onClick={handleOpen}>
           생성하기
         </Button>
-        <Modal
-          open={open}
-          onClose={handleClose}
-          aria-labelledby='simple-modal-title'
-          aria-describedby='simple-modal-description'>
-          <ChattingRoomForm setOpen={setOpen}></ChattingRoomForm>
+        <Modal open={open} onClose={handleClose}>
+          <ChattingRoomForm setOpen={triggerSetOpen}></ChattingRoomForm>
         </Modal>
       </div>
     </FlexDiv>

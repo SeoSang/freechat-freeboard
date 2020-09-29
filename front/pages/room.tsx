@@ -1,10 +1,4 @@
-import {
-  Button,
-  IconButton,
-  makeStyles,
-  TextField,
-  Typography,
-} from "@material-ui/core"
+import { Button, IconButton, makeStyles, TextField, Typography } from "@material-ui/core"
 import React, { useEffect, useState } from "react"
 import ChatMessage from "../components/ChatMessage"
 import { FlexDiv } from "../styles/div"
@@ -57,13 +51,13 @@ const room = () => {
     })
     console.log(socket)
 
-    socket.on("join", function (data: ChatData) {
+    socket.on("join", function(data: ChatData) {
       chatStore.getChat(data)
     })
-    socket.on("exit", function (data: ChatData) {
+    socket.on("exit", function(data: ChatData) {
       chatStore.getChat(data)
     })
-    socket.on("chat", function (data: ChatData) {
+    socket.on("chat", function(data: ChatData) {
       console.log("채팅을 받음")
       chatStore.getChat(data)
     })
@@ -71,11 +65,13 @@ const room = () => {
 
   useEffect(() => {
     const loadRoom = async () => {
-      if (id) {
-        chatStore.loadRoom(parseInt(id), password)
+      const result = await chatStore.loadRoom(parseInt(id), password)
+      if (result.status != 200) {
+        alert(result.text)
+        router.push("/")
       }
     }
-    loadRoom()
+    if (id) loadRoom()
   }, [id])
 
   const sendMessage = (event: React.MouseEvent | React.KeyboardEvent) => {
@@ -94,7 +90,8 @@ const room = () => {
       direction='column'
       align='center'
       justify='flex-start'
-      width='70%'>
+      width='70%'
+    >
       <Typography className={st.title} variant='h5'>
         {chatStore.room.title}
       </Typography>
@@ -104,25 +101,17 @@ const room = () => {
       {chatStore.chats.map((chat, i) => (
         <ChatMessage me={meStore.id === chat.UserId} txt={chat.chat} key={i} />
       ))}
-      <ChatMessage me={false} txt={"하이여😀"} />
-      <ChatMessage me={true} txt={"테스트중"} />
-      <ChatMessage me={true} txt={"테스트중"} />
       <FlexDiv>
         <input
           accept='image/*'
           className={st.input}
           id='contained-button-file'
           multiple
-          onKeyPress={(event) =>
-            event.key === "Enter" ? sendMessage(event) : null
-          }
+          onKeyPress={(event) => (event.key === "Enter" ? sendMessage(event) : null)}
           type='file'
         />
         <label htmlFor='contained-button-file'>
-          <IconButton
-            color='primary'
-            aria-label='upload picture'
-            component='span'>
+          <IconButton color='primary' aria-label='upload picture' component='span'>
             <PhotoCamera />
           </IconButton>
         </label>
@@ -135,9 +124,7 @@ const room = () => {
             setMessage(e.target.value)
           }}
           multiline={true}
-          onKeyPress={(event) =>
-            event.key === "Enter" ? sendMessage(event) : null
-          }
+          onKeyPress={(event) => (event.key === "Enter" ? sendMessage(event) : null)}
         />
         <Button color='primary' variant='contained' onClick={sendMessage}>
           전송

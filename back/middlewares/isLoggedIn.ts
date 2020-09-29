@@ -8,22 +8,17 @@ const isLoggedIn: RequestHandler = asyncHandler(
     // Gather the jwt access token from the request header
     const token = req.cookies ? req.cookies.token : ""
     if (!token) {
-      console.log(req)
       return next(createError(401, "Not authorized to access this route"))
     }
 
-    jwt.verify(
-      token,
-      process.env.TOKEN_SECRET as string,
-      (err: any, user: any) => {
-        if (err) {
-          return res.sendStatus(403)
-        }
-        ;(req as any).user = user
-        next() // pass the execution off to whatever request the client intended
+    jwt.verify(token, process.env.TOKEN_SECRET as string, (err: any, user: any) => {
+      if (err) {
+        return res.sendStatus(401)
       }
-    )
-  }
+      ;(req as any).user = user
+      next() // pass the execution off to whatever request the client intended
+    })
+  },
 )
 
 export default isLoggedIn

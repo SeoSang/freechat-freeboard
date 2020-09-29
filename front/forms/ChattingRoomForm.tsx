@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme: Theme) =>
     button: {
       marginTop: theme.spacing(2),
     },
-  })
+  }),
 )
 
 const ChattingRoomForm = ({ setOpen }: { setOpen: (val: boolean) => void }) => {
@@ -98,15 +98,8 @@ const ChattingRoomForm = ({ setOpen }: { setOpen: (val: boolean) => void }) => {
         <FlexDiv width='100%' justify='space-around'>
           <Typography className={st.label}>인원 수</Typography>
           <FormControl variant='outlined' className={st.formControl}>
-            <InputLabel id='demo-simple-select-outlined-label'>
-              인원수
-            </InputLabel>
-            <Select
-              labelId='demo-simple-select-outlined-label'
-              id='demo-simple-select-outlined'
-              value={max}
-              onChange={handleChange}
-              label='인원수'>
+            <InputLabel>인원수</InputLabel>
+            <Select value={max} onChange={handleChange} label='인원수'>
               <MenuItem value=''>
                 <em>None</em>
               </MenuItem>
@@ -124,7 +117,8 @@ const ChattingRoomForm = ({ setOpen }: { setOpen: (val: boolean) => void }) => {
             onChange={(e) => {
               setTitle(e.target.value)
             }}
-            className={st.input}></TextField>
+            className={st.input}
+          ></TextField>
         </FlexDiv>
         <FlexDiv width='100%' justify='space-around'>
           <Typography className={st.label}>비밀번호</Typography>
@@ -134,7 +128,8 @@ const ChattingRoomForm = ({ setOpen }: { setOpen: (val: boolean) => void }) => {
               setPassword(e.target.value)
             }}
             type='password'
-            className={st.input}></TextField>
+            className={st.input}
+          ></TextField>
         </FlexDiv>
         <Button className={st.button} variant='contained' onClick={onSubmit}>
           생성하기

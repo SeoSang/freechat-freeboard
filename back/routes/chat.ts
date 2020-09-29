@@ -44,9 +44,12 @@ router
 router
   .route("/room/:id")
   .get(isLoggedIn, loadRoom)
-  .delete(isLoggedIn, deleteRoom)
+  .delete(deleteRoom)
 
-router.route("/room").get(isLoggedIn, loadRoom).post(isLoggedIn, addRoom)
+router
+  .route("/room")
+  .get(isLoggedIn, loadRoom)
+  .post(isLoggedIn, addRoom)
 router.route("/room/check").post(isPasswordCorrect)
 
 // 채팅관련

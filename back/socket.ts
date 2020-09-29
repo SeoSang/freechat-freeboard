@@ -10,11 +10,11 @@ export default (server: Server, app: Application, middleWare: any) => {
   app.set("io", io)
   const room = io.of("/room")
   const chat = io.of("/chat")
+
   io.use((socket, next) => {
     middleWare(socket.request, socket.request.res, next)
     // cookieParser()
   })
-
   room.on("connection", (socket) => {
     console.log("room 네임스페이스에 접속")
     socket.on("disconnect", () => {
@@ -28,9 +28,12 @@ export default (server: Server, app: Application, middleWare: any) => {
     const {
       headers: { referer },
     } = req
+    console.log(referer)
     const roomId = referer
-      .split("/")
-      [referer.split("/").length - 1].replace(/\?.+/, "")
+      ?.split("?")[1]
+      ?.split("&")[0]
+      ?.split("=")[1]
+    console.log("roomId => ", roomId)
     socket.join(roomId)
     socket.to(roomId).emit("join", {
       user: "system",
@@ -60,9 +63,7 @@ export default (server: Server, app: Application, middleWare: any) => {
       }
     })
     socket.on("chat", (data) => {
-      console.log(data)
       socket.to(data.RoomId).emit(data)
-      console.log("here")
     })
   })
 }

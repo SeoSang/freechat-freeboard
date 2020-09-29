@@ -3,6 +3,7 @@ import { RootStore, useStore } from "."
 import axios from "axios"
 import { BACKEND_URL } from "../util/util"
 import { ChatData, RoomData } from "../types/chat"
+import { getErrorText } from "../util/getErrorText"
 
 export const initialChatState = {
   room: {} as RoomData,
@@ -52,19 +53,15 @@ class ChatStore {
   }
 
   @action
-  isPasswordCorrect = flow(function* (password: string, roomId: number) {
+  isPasswordCorrect = flow(function*(password: string, roomId: number) {
     const data = {
       password,
       roomId,
     }
     try {
-      const result = yield axios.post(
-        `${BACKEND_URL}/api/chat/room/check`,
-        data,
-        {
-          withCredentials: true,
-        }
-      )
+      const result = yield axios.post(`${BACKEND_URL}/api/chat/room/check`, data, {
+        withCredentials: true,
+      })
       yield console.log("isPasswordCorrect result => ", result)
       return "성공"
     } catch (e) {
@@ -75,7 +72,7 @@ class ChatStore {
   })
 
   @action
-  loadRoom = flow(function* (roomId: number, password: string) {
+  loadRoom = flow(function*(roomId: number, password: string) {
     console.log({ roomId })
     this.loadRoomError = ""
     try {
@@ -83,19 +80,21 @@ class ChatStore {
         `${BACKEND_URL}/api/chat/room?id=${roomId}&password=${password}`,
         {
           withCredentials: true,
-        }
+        },
       )
       yield console.log("loadRoom result => ", result)
       this.room = result.data.room
       this.chats = result.data.chats
+      return { status: 200, text: "방 로드 성공!" }
     } catch (e) {
       yield console.log(e)
       this.loadRoomError = e.response
+      return { status: e.response.status, text: getErrorText(e.response.status) }
     }
   })
 
   @action
-  loadRooms = flow(function* () {
+  loadRooms = flow(function*() {
     this.loadRoomsError = ""
     try {
       const result = yield axios.get(`${BACKEND_URL}/api/chat/room/all`, {
@@ -110,7 +109,7 @@ class ChatStore {
   })
 
   @action
-  addRoom = flow(function* (title: string, max: number, password: string) {
+  addRoom = flow(function*(title: string, max: number, password: string) {
     this.addRoomError = ""
     try {
       const data = {
@@ -131,13 +130,13 @@ class ChatStore {
   })
 
   @action
-  sendChat = flow(function* (message: string) {
+  sendChat = flow(function*(message: string) {
     axios.post(
       `${BACKEND_URL}/api/chat/${this.room.id}`,
       {
         chat: message,
       },
-      { withCredentials: true }
+      { withCredentials: true },
     )
   })
 
