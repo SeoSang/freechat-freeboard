@@ -12,13 +12,10 @@ import theme from "../styles/theme"
 import MainLayout from "../layout/MainLayout"
 import initializeStore from "../stores"
 import { useCookies, CookiesProvider } from "react-cookie"
-import axios from "axios"
 // css
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 import "../styles/globals.css"
 import { MainUserData } from "../types/user"
-import { BACKEND_URL } from "../util/util"
-import { Context } from "vm"
 
 interface myAppPropsType extends AppPropsType {
   meData: MainUserData
