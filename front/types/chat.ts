@@ -9,6 +9,6 @@ export interface RoomData {
 }
 
 export interface ChatData {
-  user: string
+  UserId: number
   chat: string
 }

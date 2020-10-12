@@ -199,7 +199,7 @@ function room() {
           생성하기
         </Button>
         <Modal open={open} onClose={handleClose}>
-          <ChattingRoomForm setOpen={triggerSetOpen}></ChattingRoomForm>
+          <ChattingRoomForm></ChattingRoomForm>
         </Modal>
       </div>
     </FlexDiv>

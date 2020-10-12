@@ -28,17 +28,36 @@ const useStyles = makeStyles((theme) => ({
   otherBox: {
     backgroundColor: "#F4F4F8",
   },
+  systemContainer: {
+    justifyContent: "center",
+  },
+  systemBox: {
+    backgroundColor: "#d6d2c4",
+  },
 }))
 
-const ChatMessage = ({ me, txt }: { me: boolean; txt: string }) => {
+const ChatMessage = ({ user, txt }: { user: string; txt: string }) => {
   const st = useStyles()
+  console.log("나는 ", user)
   return (
     <div
       className={clsx(
         st.messageContainer,
-        me ? st.meContainer : st.otherContainer
+        user === "me"
+          ? st.meContainer
+          : user === "system"
+          ? st.systemContainer
+          : st.otherContainer
       )}>
-      <div className={clsx(st.messageBox, me ? st.meBox : st.otherBox)}>
+      <div
+        className={clsx(
+          st.messageBox,
+          user === "me"
+            ? st.meBox
+            : user === "system"
+            ? st.systemBox
+            : st.otherBox
+        )}>
         {txt}
       </div>
     </div>

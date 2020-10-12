@@ -53,9 +53,12 @@ router
   .route("/room")
   .get(isLoggedIn, loadRoom)
   .post(isLoggedIn, addRoom)
+
 router.route("/room/check").post(isPasswordCorrect)
 
 // 채팅관련
 router.route("/:id").post(isLoggedIn, sendChat)
+// 관리자
+router.route("/system/:id").post(sendChat)
 
 export default router

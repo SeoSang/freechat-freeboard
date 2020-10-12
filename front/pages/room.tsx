@@ -48,12 +48,12 @@ const room = () => {
   const router = useRouter()
   const { id, password } = router.query as { id: string; password: string }
   const { chatStore, meStore } = useStore()
-
+  console.log(meStore)
   useEffect(() => {
     console.log("here")
     setStartDate(moment().format("LLL"))
     const socket = io.connect(`${BACKEND_URL}/chat`, {
-      query: `id=${id}`,
+      query: `id=${id}&nickname=${meStore.nickname}`,
     })
     console.log(socket)
 
@@ -89,6 +89,7 @@ const room = () => {
 
     if (message) {
       chatStore.sendChat(message)
+      setMessage("")
     } else {
       return alert("메세지를 입력해주세요")
     }
@@ -107,9 +108,22 @@ const room = () => {
       <Typography className={st.title} variant='body1'>
         {moment(chatStore.room.createdAt).format("LLL")}
       </Typography>
-      {chatStore.chats.map((chat, i) => (
-        <ChatMessage me={meStore.id === chat.UserId} txt={chat.chat} key={i} />
-      ))}
+      {chatStore.chats.map((chat, i) => {
+        console.log(chat)
+        return (
+          <ChatMessage
+            user={
+              chat.UserId === meStore.id
+                ? "me"
+                : chat.UserId === 1
+                ? "system"
+                : "other"
+            }
+            txt={chat.chat}
+            key={`room${id}_${i}`}
+          />
+        )
+      })}
       <FlexDiv>
         <input
           accept='image/*'

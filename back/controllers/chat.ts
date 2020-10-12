@@ -102,9 +102,11 @@ export const deleteRooms = asyncHandler(
 
 export const sendChat = asyncHandler(
   async (req: LoginedRequest, res: Response, next: NextFunction) => {
+    const UserId = req.user ? req.user.id : 1
+    console.log("유저아이디 : ", UserId)
     const chat = await db.Chat.create({
       RoomId: parseInt(req.params.id),
-      UserId: req.user.id,
+      UserId,
       chat: req.body.chat,
     })
     console.log(chat.get())

@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-const ChattingRoomForm = ({ setOpen }: { setOpen: (val: boolean) => void }) => {
+const ChattingRoomForm = () => {
   const [modalStyle] = React.useState(getModalStyle)
 
   const [max, setMax] = React.useState(2)
@@ -82,10 +82,12 @@ const ChattingRoomForm = ({ setOpen }: { setOpen: (val: boolean) => void }) => {
 
   const onSubmit = async () => {
     if (title === "") return alert("방 제목을 입력해주세요")
-    const result = await chatStore.addRoom(title, max, password)
+    const result: any = await chatStore.addRoom(title, max, password)
     if (result) {
       alert("방 생성이 완료되었습니다!")
-      setOpen(false)
+      router.push(
+        `/room?id=${result.data?.id}&password=${result.data?.password}`
+      )
     }
   }
 

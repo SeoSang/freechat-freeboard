@@ -10,6 +10,8 @@ export const getErrorText = (code: number) => {
       return "잘못된 접근입니다!"
     case 409:
       return "이미 존재합니다!"
+    case 410:
+      return "이미 삭제되었거나 존재하지 않습니다!"
     case 412:
       return "데이터가 비어있습니다!"
     case 413:

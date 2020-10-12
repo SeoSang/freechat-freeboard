@@ -45,7 +45,6 @@ class ChatStore {
   getChat = (data: ChatData) => {
     const result = {
       ...data,
-      UserId: this.root.meStore.id,
       createAt: new Date(),
       gif: null,
     }
@@ -87,7 +86,7 @@ class ChatStore {
       this.chats = result.data.chats
       return { status: 200, text: "방 로드 성공!" }
     } catch (e) {
-      yield console.log(e)
+      yield console.log(e.response)
       this.loadRoomError = e.response
       return { status: e.response.status, text: getErrorText(e.response.status) }
     }
@@ -121,7 +120,7 @@ class ChatStore {
         withCredentials: true,
       })
       yield console.log("addRoom result => ", result)
-      return true
+      return result
     } catch (e) {
       yield console.log(e.response)
       this.addRoomError = e.response
