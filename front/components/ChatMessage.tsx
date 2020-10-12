@@ -1,6 +1,7 @@
 import { makeStyles } from "@material-ui/core"
 import React from "react"
 import clsx from "clsx"
+import { observer } from "mobx-react"
 
 const useStyles = makeStyles((theme) => ({
   messageContainer: {
@@ -44,4 +45,4 @@ const ChatMessage = ({ me, txt }: { me: boolean; txt: string }) => {
   )
 }
 
-export default ChatMessage
+export default observer(ChatMessage)

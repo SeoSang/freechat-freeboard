@@ -7,20 +7,23 @@ import createHttpError from "http-errors"
 
 export const loadRoom = asyncHandler(
   async (req: LoginedRequest, res: Response, next: NextFunction) => {
+    console.log("파라미터들 => ", req.params)
     const exRoom = await db.Room.findOne({
       where: {
-        id: parseInt(req.query.id as string),
+        id: parseInt(req.params.id as string),
       },
     })
     if (!exRoom) {
       return next(createHttpError(410, "존재하지 않는 방입니다!"))
     }
-    if (exRoom.password && exRoom.password !== req.query.password) {
+    if (exRoom.password && exRoom.password !== req.params.password) {
       return next(createHttpError(409, "비밀번호가 틀렸습니다!"))
     }
     const io = req.app.get("io")
     const { rooms } = io.of("/chat").adapter
     if (rooms && rooms[req.params.id] && exRoom.max <= rooms[req.params.id].length) {
+      console.log("허용량 => ", exRoom.max)
+      console.log("현재사용자수 => ", rooms[req.params.id].length)
       return next(createHttpError(413, "허용인원 초과!"))
     }
     const chats = await db.Chat.findAll({

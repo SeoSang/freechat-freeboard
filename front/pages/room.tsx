@@ -53,21 +53,25 @@ const room = () => {
     console.log("here")
     setStartDate(moment().format("LLL"))
     const socket = io.connect(`${BACKEND_URL}/chat`, {
-      path: "/socket.io",
+      query: `id=${id}`,
     })
     console.log(socket)
 
-    socket.on("join", function (data: ChatData) {
+    socket.on("join", (data: ChatData) => {
       chatStore.getChat(data)
     })
-    socket.on("exit", function (data: ChatData) {
+    socket.on("exit", (data: ChatData) => {
       chatStore.getChat(data)
     })
-    socket.on("chat", function (data: ChatData) {
+    socket.on("chat", (data: ChatData) => {
       console.log("채팅을 받음")
       chatStore.getChat(data)
     })
-  }, [chatStore])
+    return () => {
+      socket.disconnect()
+      console.log("소켓 나가기")
+    }
+  }, [chatStore, id])
 
   useEffect(() => {
     const loadRoom = async () => {
