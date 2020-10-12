@@ -20,11 +20,7 @@ export const loadRoom = asyncHandler(
     }
     const io = req.app.get("io")
     const { rooms } = io.of("/chat").adapter
-    if (
-      rooms &&
-      rooms[req.params.id] &&
-      exRoom.max <= rooms[req.params.id].length
-    ) {
+    if (rooms && rooms[req.params.id] && exRoom.max <= rooms[req.params.id].length) {
       return next(createHttpError(413, "허용인원 초과!"))
     }
     const chats = await db.Chat.findAll({
@@ -39,7 +35,7 @@ export const loadRoom = asyncHandler(
       chats,
       user: req.user.nickname,
     })
-  }
+  },
 )
 
 export const loadRooms = asyncHandler(
@@ -53,7 +49,7 @@ export const loadRooms = asyncHandler(
       ],
     })
     res.status(200).json(rooms)
-  }
+  },
 )
 
 export const addRoom = asyncHandler(
@@ -74,7 +70,7 @@ export const addRoom = asyncHandler(
     }
     io.of("/room").emit("newRoom", result)
     res.status(200).json(newRoom)
-  }
+  },
 )
 
 export const deleteRoom = asyncHandler(
@@ -83,9 +79,12 @@ export const deleteRoom = asyncHandler(
     await db.Chat.destroy({ where: { RoomId: req.params.id } })
     res.status(200).json("deleteRoom 완료!")
     setTimeout(() => {
-      req.app.get("io").of("/room").emit("removeRoom", req.params.id)
+      req.app
+        .get("io")
+        .of("/room")
+        .emit("removeRoom", req.params.id)
     }, 2000)
-  }
+  },
 )
 
 export const deleteRooms = asyncHandler(
@@ -95,7 +94,7 @@ export const deleteRooms = asyncHandler(
       // truncate: true,
     })
     res.status(200).json("전체 삭제 완료")
-  }
+  },
 )
 
 export const sendChat = asyncHandler(
@@ -105,10 +104,15 @@ export const sendChat = asyncHandler(
       UserId: req.user.id,
       chat: req.body.chat,
     })
-    req.app.get("io").of("/chat").to(req.params.id).emit("chat", chat)
+    console.log(chat.get())
+    await req.app
+      .get("io")
+      .of("/chat")
+      .to(req.params.id)
+      .emit("chat", chat.get())
 
     res.status(200).json("채팅보내기 완료")
-  }
+  },
 )
 
 export const isPasswordCorrect = asyncHandler(
@@ -125,5 +129,5 @@ export const isPasswordCorrect = asyncHandler(
       return next(createHttpError(403, "비밀번호가 틀립니다!"))
     }
     res.status(200).json(true)
-  }
+  },
 )
