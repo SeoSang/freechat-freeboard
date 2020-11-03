@@ -60,9 +60,8 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-const ChattingRoomForm = () => {
+const ChattingRoomForm = ({ forwardedRef }: { forwardedRef: any }) => {
   const [modalStyle] = React.useState(getModalStyle)
-
   const [max, setMax] = React.useState(2)
   const [title, setTitle] = React.useState("")
   const [password, setPassword] = React.useState("")
@@ -139,4 +138,8 @@ const ChattingRoomForm = () => {
   )
 }
 
-export default observer(ChattingRoomForm)
+export default observer(
+  React.forwardRef((props, ref) => (
+    <ChattingRoomForm {...props} forwardedRef={ref} />
+  ))
+)

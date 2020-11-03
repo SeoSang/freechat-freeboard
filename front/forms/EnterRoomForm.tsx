@@ -1,8 +1,6 @@
 import {
   Button,
   createStyles,
-  FormControl,
-  InputLabel,
   makeStyles,
   MenuItem,
   Select,
@@ -14,7 +12,9 @@ import { observer } from "mobx-react"
 import { useRouter } from "next/dist/client/router"
 import React, { useEffect } from "react"
 import { useStore } from "../stores"
+import { useMarginStyles, useTypicalStyles } from "../styles/cssStyles"
 import { FlexDiv } from "../styles/div"
+import clsx from "clsx"
 
 function getModalStyle() {
   return {
@@ -60,20 +60,23 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-const ChattingRoomForm = ({
+const EnterRoomForm = ({
   roomId,
   max,
   title,
+  forwardedRef,
 }: {
   roomId: number
   max: number
   title: string
+  forwardedRef: any
 }) => {
   const [modalStyle] = React.useState(getModalStyle)
   const [password, setPassword] = React.useState("")
   const router = useRouter()
   const { chatStore } = useStore()
   const st = useStyles()
+  const marginSt = useMarginStyles()
 
   const onSubmit = async () => {
     const result = await chatStore.isPasswordCorrect(password, roomId)
@@ -112,7 +115,10 @@ const ChattingRoomForm = ({
             type='password'
             className={st.input}></TextField>
         </FlexDiv>
-        <Button className={st.button} variant='contained' onClick={onSubmit}>
+        <Button
+          className={clsx(st.button, marginSt.marRight1)}
+          variant='contained'
+          onClick={onSubmit}>
           입장하기
         </Button>
       </FlexDiv>
@@ -120,4 +126,10 @@ const ChattingRoomForm = ({
   )
 }
 
-export default observer(ChattingRoomForm)
+export default observer(
+  React.forwardRef(
+    (props: { roomId: number; max: number; title: string }, ref) => (
+      <EnterRoomForm {...props} forwardedRef={ref} />
+    )
+  )
+)

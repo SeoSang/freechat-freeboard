@@ -36,7 +36,7 @@ export const chatInit = (sequelize: Sequelize) => {
   Chat.init(
     {
       id: {
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.INTEGER.UNSIGNED ,
         autoIncrement: true,
         primaryKey: true,
       },

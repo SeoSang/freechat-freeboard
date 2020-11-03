@@ -73,10 +73,9 @@ const useStyles = makeStyles((theme) => ({
 
 function room() {
   const st = useStyles()
-  const router = useRouter()
   const [page, setPage] = React.useState(0)
   const [open, setOpen] = React.useState(false)
-  const [createOpen, setCreateOpen] = React.useState(false)
+  const [test, setTest] = React.useState(true)
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
   const { chatStore } = useStore()
   const [rooms, setRooms] = useState<typeof chatStore.rooms | null>()
@@ -120,15 +119,12 @@ function room() {
   }
 
   const handleOpen = () => {
-    setOpen(true)
+    // setOpen(true)
+    chatStore?.openCreateForm()
   }
 
   const handleClose = () => {
-    setOpen(false)
-  }
-
-  const triggerSetOpen = (b: boolean) => {
-    setOpen(b)
+    chatStore?.closeCreateForm()
   }
 
   return (
@@ -146,6 +142,7 @@ function room() {
                     {column.label}
                   </TableCell>
                 ))}
+                <TableCell style={{ minWidth: 20 }}>{"입장"}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -153,12 +150,7 @@ function room() {
                 ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => {
                   return (
-                    <TableRow
-                      hover
-                      role='checkbox'
-                      tabIndex={-1}
-                      key={row.id}
-                      onClick={() => setCreateOpen(true)}>
+                    <TableRow hover role='checkbox' tabIndex={-1} key={row.id}>
                       {columns.map((column) => {
                         const value = column.format
                           ? column.format(row[column.id])
@@ -169,9 +161,22 @@ function room() {
                           </TableCell>
                         )
                       })}
+                      <TableCell style={{ minWidth: 20 }}>
+                        <Button
+                          color='primary'
+                          variant='contained'
+                          onClick={() => {
+                            setOpen(true)
+                          }}>
+                          입장
+                        </Button>
+                      </TableCell>
                       <Modal
-                        open={createOpen}
-                        onClose={() => setCreateOpen(false)}>
+                        open={open}
+                        onClose={() => {
+                          setOpen(false)
+                          setTest(false)
+                        }}>
                         <EnterRoomForm
                           roomId={row.id}
                           max={row.max}
@@ -198,8 +203,8 @@ function room() {
         <Button color='primary' variant='contained' onClick={handleOpen}>
           생성하기
         </Button>
-        <Modal open={open} onClose={handleClose}>
-          <ChattingRoomForm></ChattingRoomForm>
+        <Modal open={chatStore?.createFormOpen} onClose={handleClose}>
+          <ChattingRoomForm />
         </Modal>
       </div>
     </FlexDiv>

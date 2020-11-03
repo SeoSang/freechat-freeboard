@@ -13,6 +13,8 @@ export const initialChatState = {
   loadRoomError: "" as any,
   loadRoomsError: "" as any,
   addRoomError: "" as any,
+  createFormOpen: false,
+  enterFormOpen: false,
 }
 
 class ChatStore {
@@ -23,10 +25,29 @@ class ChatStore {
   @observable loadRoomsError = initialChatState.loadRoomsError
   @observable loadRoomError = initialChatState.loadRoomError
   @observable addRoomError = initialChatState.addRoomError
+  @observable enterFormOpen = initialChatState.enterFormOpen
+  @observable createFormOpen = initialChatState.createFormOpen
   public root
 
   constructor(root: RootStore) {
     this.root = root
+  }
+
+  @action
+  openCreateForm = () => {
+    this.createFormOpen = true
+  }
+  @action
+  openEnterForm = () => {
+    this.enterFormOpen = true
+  }
+  @action
+  closeCreateForm = () => {
+    this.createFormOpen = false
+  }
+  @action
+  closeEnterForm = () => {
+    this.enterFormOpen = false
   }
 
   @action
@@ -52,15 +73,19 @@ class ChatStore {
   }
 
   @action
-  isPasswordCorrect = flow(function*(password: string, roomId: number) {
+  isPasswordCorrect = flow(function* (password: string, roomId: number) {
     const data = {
       password,
       roomId,
     }
     try {
-      const result = yield axios.post(`${BACKEND_URL}/api/chat/room/check`, data, {
-        withCredentials: true,
-      })
+      const result = yield axios.post(
+        `${BACKEND_URL}/api/chat/room/check`,
+        data,
+        {
+          withCredentials: true,
+        }
+      )
       yield console.log("isPasswordCorrect result => ", result)
       return "성공"
     } catch (e) {
@@ -71,7 +96,7 @@ class ChatStore {
   })
 
   @action
-  loadRoom = flow(function*(roomId: number, password: string) {
+  loadRoom = flow(function* (roomId: number, password: string) {
     console.log({ roomId })
     this.loadRoomError = ""
     try {
@@ -79,7 +104,7 @@ class ChatStore {
         `${BACKEND_URL}/api/chat/room/${roomId}/${password}`,
         {
           withCredentials: true,
-        },
+        }
       )
       yield console.log("loadRoom result => ", result)
       this.room = result.data.room
@@ -88,12 +113,15 @@ class ChatStore {
     } catch (e) {
       yield console.log(e.response)
       this.loadRoomError = e.response
-      return { status: e.response.status, text: getErrorText(e.response.status) }
+      return {
+        status: e.response.status,
+        text: getErrorText(e.response.status),
+      }
     }
   })
 
   @action
-  loadRooms = flow(function*() {
+  loadRooms = flow(function* () {
     this.loadRoomsError = ""
     try {
       const result = yield axios.get(`${BACKEND_URL}/api/chat/room/all`, {
@@ -108,7 +136,7 @@ class ChatStore {
   })
 
   @action
-  addRoom = flow(function*(title: string, max: number, password: string) {
+  addRoom = flow(function* (title: string, max: number, password: string) {
     this.addRoomError = ""
     try {
       const data = {
@@ -129,13 +157,13 @@ class ChatStore {
   })
 
   @action
-  sendChat = flow(function*(message: string) {
+  sendChat = flow(function* (message: string) {
     axios.post(
       `${BACKEND_URL}/api/chat/${this.room.id}`,
       {
         chat: message,
       },
-      { withCredentials: true },
+      { withCredentials: true }
     )
   })
 
