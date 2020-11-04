@@ -1,12 +1,5 @@
 import clsx from "clsx"
-import React, {
-  FC,
-  ReactComponentElement,
-  ReactElement,
-  useCallback,
-  useEffect,
-} from "react"
-import st from "./MainLayout.module.css"
+import React, { FC, ReactComponentElement, useCallback, useEffect } from "react"
 import Copyright from "../components/Copyright"
 import styled from "styled-components"
 import { RootStore, useStore } from "../stores"
@@ -118,6 +111,9 @@ const useStyles = makeStyles((theme: Theme) =>
       display: "flex",
       marginLeft: "auto",
     },
+    footer: {
+      marginTop: theme.spacing(3),
+    },
   })
 )
 
@@ -132,7 +128,6 @@ const MainLayout: FC<{
 
   useEffect(() => {
     if (meStore.isLogouted) {
-      console.log("로그아웃! 쿠키 지워집니다")
       cookie.remove("token", { path: "/" })
       router.push("/")
       meStore.initialize()
@@ -232,7 +227,7 @@ const MainLayout: FC<{
               <ListItemIcon>
                 <AssignmentIcon />
               </ListItemIcon>
-              <ListItemText primary={"게시판_테스트용"} />
+              <ListItemText primary={"게시판"} />
             </ListItem>
           </PageLink>
           <PageLink href='rooms'>
@@ -250,7 +245,7 @@ const MainLayout: FC<{
             <ListItemIcon>
               <MapIcon />
             </ListItemIcon>
-            <ListItemText primary={"지도 보기"} />
+            <ListItemText primary={"지도 보기(미개봉)"} />
           </ListItem>
           <ListItem button>
             <ListItemIcon>
@@ -277,7 +272,7 @@ const MainLayout: FC<{
         })}>
         <div className={classes.drawerHeader} />
         {children}
-        <Footer>
+        <Footer className={classes.footer}>
           <Copyright />
         </Footer>
       </main>

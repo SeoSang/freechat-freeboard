@@ -12,26 +12,26 @@ export default (server: Server, app: Application, middleWare: any) => {
   const chat = io.of("/chat")
 
   // io.use((socket, next) => {
-    // middleWare(socket.request, socket.request.res, next)
-    // cookieParser()
+  // middleWare(socket.request, socket.request.res, next)
+  // cookieParser()
   // })
   room.on("connection", (socket) => {
-    console.log("room 네임스페이스에 접속")
-    socket.on("disconnect", () => {
-      console.log("room 네임스페이스 접속 해제")
-    })
+    socket.on("disconnect", () => {})
   })
 
   chat.on("connection", (socket) => {
-    console.log("chat 네임스페이스에 접속")
-    const BACK_URL = `http://localhost:${app.get("port")}/api` 
+    const BACK_URL = `http://localhost:${app.get("port")}/api`
     const roomId = socket.handshake.query.id
     const nickname = socket.handshake.query.nickname
-    console.log("roomId => ", roomId)
     socket.join(roomId)
-    axios.post(`${BACK_URL}/chat/system/${roomId}`, {
-      chat :`${nickname}님이 입장하셨습니다.` 
-    }).then(()=>{}).catch((e)=>{console.error(e)})
+    axios
+      .post(`${BACK_URL}/chat/system/${roomId}`, {
+        chat: `${nickname}님이 입장하셨습니다.`,
+      })
+      .then(() => {})
+      .catch((e) => {
+        console.error(e)
+      })
 
     socket.on("disconnect", () => {
       console.log("chat 네임스페이스 접속 해제")
@@ -41,17 +41,22 @@ export default (server: Server, app: Application, middleWare: any) => {
       if (userCount === 0) {
         // 유저가 0명이면 방 삭제
         axios
-        .delete(`${BACK_URL}/chat/room/${roomId}`)
-        .then(() => {
-          console.log("방 제거 요청 성공")
-        })
-        .catch((error) => {
-          console.error(error)
-        })
+          .delete(`${BACK_URL}/chat/room/${roomId}`)
+          .then(() => {
+            console.log("방 제거 요청 성공")
+          })
+          .catch((error) => {
+            console.error(error)
+          })
       } else {
-        axios.post(`${BACK_URL}/chat/system/${roomId}`, {
-          chat :`${nickname}님이 퇴장하셨습니다.` 
-        }).then(()=>{}).catch((e)=>{console.error(e)})
+        axios
+          .post(`${BACK_URL}/chat/system/${roomId}`, {
+            chat: `${nickname}님이 퇴장하셨습니다.`,
+          })
+          .then(() => {})
+          .catch((e) => {
+            console.error(e)
+          })
       }
     })
     socket.on("chat", (data) => {

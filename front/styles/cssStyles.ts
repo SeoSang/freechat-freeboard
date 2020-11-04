@@ -23,6 +23,9 @@ export const useTypicalStyles = makeStyles((theme: Theme) =>
       color: "gray",
       fontStyle: "italic",
     },
+    bold: {
+      fontWeight: 500,
+    },
   })
 )
 

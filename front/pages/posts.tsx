@@ -11,8 +11,11 @@ import TableRow from "@material-ui/core/TableRow"
 import { useStore } from "../stores"
 import { observer } from "mobx-react"
 import moment from "moment"
-import { PageLink } from "../components/PageLink"
 import { useRouter } from "next/dist/client/router"
+import { Typography } from "@material-ui/core"
+import clsx from "clsx"
+import { useMarginStyles, useTypicalStyles } from "../styles/cssStyles"
+import { FlexDiv } from "../styles/div"
 
 interface Column {
   id: "id" | "title" | "commentCount" | "createdAt"
@@ -48,12 +51,15 @@ const useStyles = makeStyles({
 })
 
 function StickyHeadTable() {
-  const classes = useStyles()
   const router = useRouter()
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
   const { postStore } = useStore()
   const [posts, setPosts] = useState<typeof postStore.posts | null>()
+
+  const classes = useStyles()
+  const typ = useTypicalStyles()
+  const mar = useMarginStyles()
 
   useEffect(() => {
     const getPost = async () => {
@@ -82,58 +88,63 @@ function StickyHeadTable() {
   }
 
   return (
-    <Paper className={classes.root}>
-      <TableContainer className={classes.container}>
-        <Table stickyHeader aria-label='sticky table'>
-          <TableHead>
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth }}>
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {posts
-              ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => {
-                return (
-                  <TableRow
-                    hover
-                    role='checkbox'
-                    tabIndex={-1}
-                    key={row.id}
-                    onClick={onClickRow(row.id)}>
-                    {columns.map((column) => {
-                      const value = column.format
-                        ? column.format(row[column.id])
-                        : row[column.id]
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          {value}
-                        </TableCell>
-                      )
-                    })}
-                  </TableRow>
-                )
-              })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
-        component='div'
-        count={posts ? posts.length : 0}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
-      />
-    </Paper>
+    <FlexDiv direction='column'>
+      <Typography className={clsx(typ.bold, mar.marBottom2)} variant='h4'>
+        자유게시판
+      </Typography>
+      <Paper className={classes.root}>
+        <TableContainer className={classes.container}>
+          <Table stickyHeader aria-label='sticky table'>
+            <TableHead>
+              <TableRow>
+                {columns.map((column) => (
+                  <TableCell
+                    key={column.id}
+                    align={column.align}
+                    style={{ minWidth: column.minWidth }}>
+                    {column.label}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {posts
+                ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row) => {
+                  return (
+                    <TableRow
+                      hover
+                      role='checkbox'
+                      tabIndex={-1}
+                      key={row.id}
+                      onClick={onClickRow(row.id)}>
+                      {columns.map((column) => {
+                        const value = column.format
+                          ? column.format(row[column.id])
+                          : row[column.id]
+                        return (
+                          <TableCell key={column.id} align={column.align}>
+                            {value}
+                          </TableCell>
+                        )
+                      })}
+                    </TableRow>
+                  )
+                })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[10, 25, 100]}
+          component='div'
+          count={posts ? posts.length : 0}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onChangePage={handleChangePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+        />
+      </Paper>
+    </FlexDiv>
   )
 }
 

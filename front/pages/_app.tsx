@@ -34,7 +34,6 @@ const MyApp = ({ Component, pageProps, meData }: myAppPropsType) => {
   }, [])
 
   useEffect(() => {
-    console.log("_app useEffect")
     if (store.meStore.id != -1) return
     store.meStore.loadMe()
   }, [])
@@ -62,28 +61,5 @@ const MyApp = ({ Component, pageProps, meData }: myAppPropsType) => {
     </>
   )
 }
-
-// MyApp.getInitialProps = async (context: Context) => {
-//   const { ctx, Component } = context
-//   // 서버일때만 쿠키 준다 (클라이언트일때는 알아서 쿠키 줌)
-//   console.log(ctx)
-//   const cookie = ctx.req.headers.cookie
-//   if (cookie) {
-//     axios.defaults.headers.Cookie = cookie // 모든 axios 에 적용
-//   }
-//   try {
-//     const response = await axios.get(`${BACKEND_URL}/api/user`, { withCredentials: true })
-//     const me: MainUserData = response.data
-//     console.log(me)
-//     return {
-//       meData: me, // will be passed to the page component as props
-//     }
-//   } catch (e) {
-//     console.log("error")
-//     return {
-//       props: { meData: null },
-//     }
-//   }
-// }
 
 export default observer(MyApp)

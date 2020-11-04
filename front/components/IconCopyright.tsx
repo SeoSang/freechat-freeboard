@@ -5,7 +5,7 @@ const useStyles = makeStyles((theme) => ({
   icon_copyright: {
     color: "gray",
     position: "absolute",
-    bottom: "-11%",
+    bottom: "-14%",
     opacity: 0.3,
   },
   divider: {

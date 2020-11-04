@@ -1,13 +1,9 @@
-import axios from "axios"
 import React, { useState, useContext, useEffect } from "react"
 import { useRouter } from "next/dist/client/router"
-import Copyright from "../components/Copyright"
 import { useForm } from "react-hook-form"
 import { PageLink } from "../components/PageLink"
-import { BACKEND_URL } from "../util/util"
-import { MainUserData } from "../types/user"
 // mobx
-import { inject, observer } from "mobx-react"
+import { observer } from "mobx-react"
 // Type
 import { LoginFormValues } from "../types/user"
 // material-ui
@@ -19,12 +15,10 @@ import FormControlLabel from "@material-ui/core/FormControlLabel"
 import Checkbox from "@material-ui/core/Checkbox"
 import Link from "@material-ui/core/Link"
 import Grid from "@material-ui/core/Grid"
-import Box from "@material-ui/core/Box"
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined"
 import Typography from "@material-ui/core/Typography"
 import { makeStyles } from "@material-ui/core/styles"
 import Container from "@material-ui/core/Container"
-import { NextPage } from "next"
 import { useStore } from "../stores"
 
 const LoginFormValidator = (errors: any) => {
@@ -128,8 +122,7 @@ const Login = () => {
             fullWidth
             variant='contained'
             color='primary'
-            className={classes.submit}
-          >
+            className={classes.submit}>
             로그인
           </Button>
           <Grid container>

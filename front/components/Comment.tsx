@@ -27,11 +27,9 @@ const useStyles = makeStyles((theme) => ({
 
 const Comment = ({ comments }: { comments: CommentData[] }) => {
   const classes = useStyles()
-  console.log(comments)
   return (
     <List className={classes.root}>
       {comments?.map((comment) => {
-        console.log("Comment", comment)
         return (
           <React.Fragment key={comment.id}>
             <ListItem key={comment.id} alignItems='flex-start'>

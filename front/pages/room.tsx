@@ -11,7 +11,6 @@ import { FlexDiv } from "../styles/div"
 import moment from "moment"
 import { PhotoCamera } from "@material-ui/icons"
 import io from "socket.io-client"
-import axios from "axios"
 import { observer } from "mobx-react"
 import { useStore } from "../stores"
 import { BACKEND_URL } from "../util/util"
@@ -52,14 +51,11 @@ const room = () => {
   const router = useRouter()
   const { id, password } = router.query as { id: string; password: string }
   const { chatStore, meStore } = useStore()
-  console.log(meStore)
   useEffect(() => {
-    console.log("here")
     setStartDate(moment().format("LLL"))
     const socket = io.connect(`${BACKEND_URL}/chat`, {
       query: `id=${id}&nickname=${meStore.nickname}`,
     })
-    console.log(socket)
 
     socket.on("join", (data: ChatData) => {
       chatStore.getChat(data)
@@ -68,12 +64,10 @@ const room = () => {
       chatStore.getChat(data)
     })
     socket.on("chat", (data: ChatData) => {
-      console.log("채팅을 받음")
       chatStore.getChat(data)
     })
     return () => {
       socket.disconnect()
-      console.log("소켓 나가기")
     }
   }, [chatStore, id])
 

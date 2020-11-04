@@ -11,16 +11,15 @@ import TableRow from "@material-ui/core/TableRow"
 import { useStore } from "../stores"
 import { observer } from "mobx-react"
 import moment from "moment"
-import { PageLink } from "../components/PageLink"
-import { useRouter } from "next/dist/client/router"
-import { Button, Modal } from "@material-ui/core"
+import { Button, Modal, Typography } from "@material-ui/core"
 import { FlexDiv } from "../styles/div"
-import theme from "../styles/theme"
 import ChattingRoomForm from "../forms/ChattingRoomForm"
 import EnterRoomForm from "../forms/EnterRoomForm"
 import { BACKEND_URL } from "../util/util"
 import { RoomData } from "../types/chat"
 import io from "socket.io-client"
+import { useMarginStyles, useTypicalStyles } from "../styles/cssStyles"
+import clsx from "clsx"
 
 interface Column {
   id: "owner" | "title" | "userCount" | "createdAt" | "max"
@@ -80,6 +79,9 @@ function room() {
   const { chatStore } = useStore()
   const [rooms, setRooms] = useState<typeof chatStore.rooms | null>()
 
+  const typ = useTypicalStyles()
+  const mar = useMarginStyles()
+
   useEffect(() => {
     const socket = io.connect(`${BACKEND_URL}/room`, {
       // 네임스페이스
@@ -129,6 +131,9 @@ function room() {
 
   return (
     <FlexDiv direction='column'>
+      <Typography className={clsx(typ.bold, mar.marBottom2)} variant='h4'>
+        비밀채팅방
+      </Typography>
       <Paper className={st.root}>
         <TableContainer className={st.container}>
           <Table stickyHeader aria-label='sticky table'>

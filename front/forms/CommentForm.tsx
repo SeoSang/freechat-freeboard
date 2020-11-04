@@ -1,5 +1,4 @@
 import { Button, TextField } from "@material-ui/core"
-import CommentIcon from "@material-ui/icons/Comment"
 import { observer } from "mobx-react"
 import React, { useState } from "react"
 import { useStore } from "../stores"

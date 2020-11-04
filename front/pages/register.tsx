@@ -4,17 +4,12 @@ import Avatar from "@material-ui/core/Avatar"
 import Button from "@material-ui/core/Button"
 import CssBaseline from "@material-ui/core/CssBaseline"
 import TextField from "@material-ui/core/TextField"
-import FormControlLabel from "@material-ui/core/FormControlLabel"
-import Checkbox from "@material-ui/core/Checkbox"
-import Link from "@material-ui/core/Link"
 import Grid from "@material-ui/core/Grid"
-import Box from "@material-ui/core/Box"
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined"
 import Typography from "@material-ui/core/Typography"
 import { makeStyles } from "@material-ui/core/styles"
 import Container from "@material-ui/core/Container"
 import { useForm } from "react-hook-form"
-import Copyright from "../components/Copyright"
 import { PageLink } from "../components/PageLink"
 import { BACKEND_URL } from "../util/util"
 import { useRouter } from "next/dist/client/router"
@@ -160,8 +155,7 @@ export default function register() {
             fullWidth
             variant='contained'
             color='primary'
-            className={classes.submit}
-          >
+            className={classes.submit}>
             회원가입
           </Button>
           <Grid container justify='flex-end'>
@@ -180,9 +174,6 @@ export default function register() {
           </Grid>
         </form>
       </div>
-      <Box mt={5}>
-        <Copyright />
-      </Box>
     </Container>
   )
 }

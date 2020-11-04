@@ -37,7 +37,6 @@ export default function initializeStore(meData: MainUserData | null = null) {
     return new RootStore(meData)
   }
   if (store === null || meData) {
-    console.log("새로 생성")
     store = new RootStore(meData)
   }
 

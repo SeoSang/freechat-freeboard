@@ -38,7 +38,6 @@ const useStyles = makeStyles((theme) => ({
 
 const ChatMessage = ({ user, txt }: { user: string; txt: string }) => {
   const st = useStyles()
-  console.log("나는 ", user)
   return (
     <div
       className={clsx(

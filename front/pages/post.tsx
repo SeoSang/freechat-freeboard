@@ -58,11 +58,6 @@ const post = () => {
         comments={
           postStore.post?.Comments ? postStore.post.Comments : []
         }></Comment>
-      {/* <FlexDiv width='100%' direction='column'>
-        {postStore.post.Comments
-          ? postStore.post.Comments.map((comment) => <div>comment 테스트</div>)
-          : ""}
-      </FlexDiv> */}
       <Divider style={{ alignSelf: "stretch" }} variant='middle' />
       <Divider variant='middle' />
       <CommentForm postId={parseInt(id)}></CommentForm>
