@@ -19,6 +19,10 @@ export const useTypicalStyles = makeStyles((theme: Theme) =>
     center: {
       textAlign: "center",
     },
+    comment: {
+      color: "gray",
+      fontStyle: "italic",
+    },
   })
 )
 

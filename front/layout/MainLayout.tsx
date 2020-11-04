@@ -31,6 +31,7 @@ import ListItem from "@material-ui/core/ListItem"
 import ListItemIcon from "@material-ui/core/ListItemIcon"
 import ListItemText from "@material-ui/core/ListItemText"
 import AssignmentIcon from "@material-ui/icons/Assignment"
+import HomeIcon from "@material-ui/icons/Home"
 import ChatIcon from "@material-ui/icons/Chat"
 import MapIcon from "@material-ui/icons/Map"
 import MiniProfile from "./MiniProfile"
@@ -167,9 +168,11 @@ const MainLayout: FC<{
             className={clsx(classes.menuButton, open && classes.hide)}>
             <MenuIcon />
           </IconButton>
-          <Typography variant='h6' noWrap>
-            메뉴
-          </Typography>
+          <PageLink href='/'>
+            <IconButton color='inherit' className={clsx(classes.menuButton)}>
+              <HomeIcon />
+            </IconButton>
+          </PageLink>
           <div className={classes.menuRightDiv}>
             <PageLink href='/login'>
               <Typography

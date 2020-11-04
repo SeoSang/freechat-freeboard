@@ -39,6 +39,10 @@ const useStyles = makeStyles((theme) => ({
   input: {
     display: "none",
   },
+  comment: {
+    color: "gray",
+    fontStyle: "italic",
+  },
 }))
 
 const room = () => {
@@ -160,6 +164,9 @@ const room = () => {
           전송
         </Button>
       </FlexDiv>
+      <Typography className={st.comment} variant='body2'>
+        *사진첨부 기능은 업데이트 예정입니다.
+      </Typography>
     </FlexDiv>
   )
 }
