@@ -67,7 +67,9 @@ export default function Home() {
   }
 
   return (
-    <FlexDiv style={{ position: "relative" }} direction='column' height='100vh'>
+    <FlexDiv
+      style={{ minHeight: "100vh", position: "relative" }}
+      direction='column'>
       <CssBaseline />
       <FlexDiv>
         <div className={typ.center}>

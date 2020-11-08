@@ -1,3 +1,4 @@
+import { Button } from "@material-ui/core"
 import React from "react"
 
 const TakeThisBoard = () => {
@@ -26,9 +27,11 @@ const TakeThisBoard = () => {
           </a>
         </li>
         <li>
-          <a href='https://i-am-seo-sang.vercel.app/profile' target='_blank'>
-            Who are you?
-          </a>
+          <Button variant='contained'>
+            <a href='https://i-am-seo-sang.vercel.app/profile' target='_blank'>
+              Who are you?
+            </a>
+          </Button>
         </li>
       </ul>
     </div>

@@ -12,10 +12,12 @@ import { useStore } from "../stores"
 import { observer } from "mobx-react"
 import moment from "moment"
 import { useRouter } from "next/dist/client/router"
-import { Typography } from "@material-ui/core"
+import { Button, Theme, Typography } from "@material-ui/core"
 import clsx from "clsx"
 import { useMarginStyles, useTypicalStyles } from "../styles/cssStyles"
 import { FlexDiv } from "../styles/div"
+import { PageLink } from "../components/PageLink"
+import theme from "../styles/theme"
 
 interface Column {
   id: "id" | "title" | "commentCount" | "createdAt"
@@ -41,14 +43,20 @@ const columns: Column[] = [
   },
 ]
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme: Theme) => ({
   root: {
     width: "100%",
   },
   container: {
     maxHeight: 440,
   },
-})
+  buttonContainer: {
+    width: "100%",
+    display: "flex",
+    justifyContent: "flex-end",
+    margin: theme.spacing(1, 0),
+  },
+}))
 
 function StickyHeadTable() {
   const router = useRouter()
@@ -144,6 +152,13 @@ function StickyHeadTable() {
           onChangeRowsPerPage={handleChangeRowsPerPage}
         />
       </Paper>
+      <div className={classes.buttonContainer}>
+        <PageLink href='addpost'>
+          <Button variant='contained' color='primary'>
+            게시글 작성
+          </Button>
+        </PageLink>
+      </div>
     </FlexDiv>
   )
 }

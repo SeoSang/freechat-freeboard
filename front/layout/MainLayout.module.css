@@ -1,11 +1,11 @@
 .main_viewport {
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .menu_bar {
   width: 100%;
-  background-color: #24292E;
-  color: #FAFBFC;
+  background-color: #24292e;
+  color: #fafbfc;
 }
 
 .menu_bar__left {
@@ -33,7 +33,7 @@
 }
 
 .menu_searchbar {
-  background-color: #3F4448;
+  background-color: #3f4448;
   margin: 10% 2%;
 }
 
