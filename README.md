@@ -1,6 +1,7 @@
 # Secreet Chatting Room & General Forum!
 
 <br>
+<p align="center">
 <center>
 Secreet Chatting Room & General Forum!<br/>  
   (비밀채팅방 & 공용게시판)
@@ -8,6 +9,7 @@ Secreet Chatting Room & General Forum!<br/>
   <a href="http://freechat-freeboard.ml/" target="_blank">Go!</a> 
 </center>
 <br>
+</p>
 
 <p align="center">
   <a href="#chatting-room">채팅방</a> •
