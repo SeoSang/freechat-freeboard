@@ -12,9 +12,7 @@ const CommentForm = ({ postId }: { postId: number }) => {
 
   const handleCommentText = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCommentText(e.target.value)
-    commentText.length < 2
-      ? setHelperText("댓글이 너무 짧습니다")
-      : setHelperText("")
+    commentText.length < 2 ? setHelperText("댓글이 너무 짧습니다") : setHelperText("")
   }
 
   const onClickCancle = () => {
@@ -28,7 +26,7 @@ const CommentForm = ({ postId }: { postId: number }) => {
   }
 
   return (
-    <div style={{ width: "100%", margin: "0.5rem 0" }}>
+    <div style={{ width: "90%", margin: "0.5rem 0" }}>
       <TextField
         id='outlined-full-width'
         label='댓글을 입력하세요'
@@ -53,7 +51,8 @@ const CommentForm = ({ postId }: { postId: number }) => {
             style={{ marginRight: "0.5em" }}
             variant='contained'
             color='secondary'
-            onClick={onClickCancle}>
+            onClick={onClickCancle}
+          >
             취소
           </Button>
           <Button variant='contained' color='primary' onClick={onClickSubmit}>

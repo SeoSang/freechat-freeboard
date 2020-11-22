@@ -7,7 +7,7 @@ export interface PostData {
   Comments?: any
   CategoryId: number
   Category: { id: number; name: string }
-  User: lightUserData
+  Writters: lightUserData
   createdAt: Date
   updatedAt: Date
 }
