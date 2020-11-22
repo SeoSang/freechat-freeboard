@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     postContainer: {
       minHeight: "20vh",
-      backgroundColor: "white",
+      backgroundColor: "#F1F0F0",
       marginTop: theme.spacing(5),
       marginBottom: theme.spacing(5),
       width: "90%",

@@ -17,6 +17,8 @@ import { FlexDiv } from "../styles/div"
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "90%",
+    backgroundColor: "#F1F0F0",
+    marginTop: theme.spacing(2),
   },
   fonts: {
     fontWeight: "bold",
@@ -24,15 +26,22 @@ const useStyles = makeStyles((theme) => ({
   inline: {
     display: "inline",
   },
+  titleContainer: {
+    display: "flex",
+    width: "100%",
+    paddingBottom: theme.spacing(1),
+    paddingLeft: theme.spacing(2),
+  },
 }))
 
 const Comment = ({ comments }: { comments: CommentData[] }) => {
   const classes = useStyles()
   return (
     <List className={classes.root}>
-      <FlexDiv width='100%' justify='flex-start'>
+      <div className={classes.titleContainer}>
         <Typography variant='h6'>댓글</Typography>
-      </FlexDiv>
+      </div>
+      <Divider style={{ alignSelf: "stretch" }} variant='middle' />
       {comments?.map((comment) => {
         return (
           <React.Fragment key={comment.id}>
